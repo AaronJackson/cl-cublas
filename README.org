@@ -1,0 +1,3 @@
+* Playing about with cuBLAS in Common Lisp
+
+Don't use it, this is all terrible and ugly.
