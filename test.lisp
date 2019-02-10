@@ -1,12 +1,11 @@
-(load "~/.sbclrc")
-(ql:quickload :cffi)
-(ql:quickload :cffi-libffi)
+(asdf:load-system :cl-cublas)
+
+(in-package #:cl-cublas)
 
 (cffi:define-foreign-library cublas
     (t (:default "libcublas")))
 (cffi:use-foreign-library cublas)
 
-(load "cublas.lisp")
 
 (defparameter *cublas* (cffi:foreign-alloc :pointer))
 (defparameter *cpuA* (cffi:foreign-alloc
