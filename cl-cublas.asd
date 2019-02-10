@@ -3,7 +3,7 @@
 (defsystem #:cl-cublas
   :description "Playing about with cuBLAS in Common Lisp"
   :author "Aaron Jackson <aaron.jackson@nottingham.ac.uk>"
-  :depends-on ("cffi" "cffi-libffi")
+  :depends-on (#:cffi #:cffi-libffi)
   :serial t
   :components ((:file "package")
                (:file "cublas")))

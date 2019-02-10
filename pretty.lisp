@@ -1,12 +1,10 @@
-(load "~/.sbclrc")
-(ql:quickload :cffi)
-(ql:quickload :cffi-libffi)
+(ql:quickload :cl-cublas)
+
+(in-package #:cl-cublas)
 
 (cffi:define-foreign-library cublas
     (t (:default "libcublas")))
 (cffi:use-foreign-library cublas)
-
-(load "cublas.lisp")
 
 (defclass matrix ()
   ((rows

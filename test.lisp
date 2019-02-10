@@ -1,4 +1,4 @@
-(asdf:load-system :cl-cublas)
+(ql:quickload :cl-cublas)
 
 (in-package #:cl-cublas)
 
