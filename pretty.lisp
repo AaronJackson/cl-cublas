@@ -62,8 +62,11 @@
 (defmethod print-object ((m matrix) stream)
   "prints a matrix, uh, as a list for now"
   (cpu m)
-  (format stream "~$" (loop for i from 0 below (* (rows m) (cols m))
-			 collect (cffi:mem-aref (ptr-cpu m) :float i)))
+  (loop for c from 0 below (cols m) do
+       (progn (loop for r from 0 below (rows m) do
+		   (format stream "~$ "
+			   (cffi:mem-aref (ptr-cpu m) :float (* r c))))
+	      (format stream "~%")))
   m)
 
 ;; The dimensions may be wrong, haven't really thought about them much
