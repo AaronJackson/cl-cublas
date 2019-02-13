@@ -26,10 +26,13 @@
 
 (defmethod set-data ((m matrix) data)
   "set data of matrix"
-  (setf (slot-value m 'ptr-cpu)
-	(cffi:foreign-alloc
-	 :float
-	 :initial-contents data))
+  (setf (ptr-cpu m) (cffi:foreign-alloc
+		     :float :count (* (rows m) (cols m))
+		     :initial-element 0.0))
+  (dotimes (r (rows m))
+    (dotimes (c (cols m))
+      (setf (cffi:mem-aref (ptr-cpu m) :float (+ (* (cols m) r) c))
+	    (aref data (+ (* (rows m) c) r)))))
   (setf (current-ptr m) 'cpu)
   m)
 
@@ -62,27 +65,25 @@
 (defmethod print-object ((m matrix) stream)
   "prints a matrix, uh, as a list for now"
   (cpu m)
-  (loop for c from 0 below (cols m) do
-       (progn (loop for r from 0 below (rows m) do
-		   (format stream "~$ "
-			   (cffi:mem-aref (ptr-cpu m) :float (* r c))))
-	      (format stream "~%")))
+  (dotimes (c (cols m))
+       (dotimes (r (rows m))
+	 (format stream "~$ " (cffi:mem-aref (ptr-cpu m) :float
+					     (+ (* (cols m) r) c))))
+       (format stream "~%"))
   m)
 
 ;; The dimensions may be wrong, haven't really thought about them much
 ;; since I'm only trying a 3x3 matrix at the moment.
 (defmethod multiply ((A matrix) (B matrix))
   "A"
-  (gpu A)
-  (gpu B)
   (let ((Z (make-instance 'matrix :rows (rows A) :cols (cols B))))
     (set-data Z (make-array (* (rows A) (cols A))
+			    :element-type ':float
 			    :initial-element 0.0))
-    (gpu Z)
     (cublasSgemm 78 78 (cols A) (rows B) (rows A) 1.0
-		 (cffi:mem-ref (ptr-gpu A) ':pointer) (rows A)
-		 (cffi:mem-ref (ptr-gpu B) ':pointer) (rows A) 1.0
-		 (cffi:mem-ref (ptr-gpu Z) ':pointer) (cols A))
+		 (cffi:mem-ref (ptr-gpu (gpu A)) ':pointer) (rows A)
+		 (cffi:mem-ref (ptr-gpu (gpu B)) ':pointer) (rows A) 1.0
+		 (cffi:mem-ref (ptr-gpu (gpu Z)) ':pointer) (cols A))
     Z))
 
 (defvar A (make-instance 'matrix :rows 3 :cols 3))
@@ -95,6 +96,11 @@
 	      2.0 1.0 2.0
 	      1.0 2.0 1.0))
 
-;; Hmm output is transposed. Might need to switch to column first
-;; indexing.
+(print A)
 (print (multiply A B))
+
+;; Should print
+;;      8    10     8
+;;     20    25    20
+;;     32    40    32
+
