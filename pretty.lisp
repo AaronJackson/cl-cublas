@@ -28,7 +28,7 @@
 	 :initial-contents data))
   m)
 
-(defmethod push-matrix (m)
+(defmethod push-matrix ((m matrix))
   "push c data to cuda data"
   (if (not (ptr-gpu m))
       (progn (setf (ptr-gpu m)
@@ -42,7 +42,7 @@
 		   (cffi:mem-ref (ptr-gpu m) ':pointer) (cols m))
   m)
 
-(defmethod pull-matrix (m)
+(defmethod pull-matrix ((m matrix))
   "pull cuda data to c data"
   (cublasGetMatrix (rows m) (cols m)
 		   (cffi:foreign-type-size ':float)
@@ -50,7 +50,7 @@
 		   (rows m) (ptr-c m) (cols m))
   m)
 
-(defmethod print-matrix (m)
+(defmethod print-matrix ((m matrix))
   "prints a matrix, uh, as a list for now"
   (print (loop for i from 0 below (* (rows m) (cols m))
 	    collect (cffi:mem-aref (ptr-c m) :float i)))
