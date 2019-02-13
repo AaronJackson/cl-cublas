@@ -32,7 +32,7 @@
                       ((cl:lower-case-p c)
                        (helper (cl:cdr lst) 'lower (cl:cons (cl:char-upcase c) rest)))
                       ((cl:digit-char-p c)
-                       (helper (cl:cdr lst) 'digit
+                       (helper (cl:cdr lst) 'digit 
                                (cl:case last
                                  ((upper lower) (cl:list* c #\- rest))
                                  (cl:t (cl:cons c rest)))))
@@ -57,43 +57,54 @@
 
 (cffi:defcfun ("cublasInit" cublasInit) :pointer)
 
+
 (cffi:defcfun ("cublasShutdown" cublasShutdown) :pointer)
+
 
 (cffi:defcfun ("cublasGetError" cublasGetError) :pointer)
 
+
 (cffi:defcfun ("cublasGetVersion" cublasGetVersion) :pointer
   (version :pointer))
+
 
 (cffi:defcfun ("cublasAlloc" cublasAlloc) :pointer
   (n :int)
   (elemSize :int)
   (devicePtr :pointer))
 
+
 (cffi:defcfun ("cublasFree" cublasFree) :pointer
   (devicePtr :pointer))
 
+
 (cffi:defcfun ("cublasSetKernelStream" cublasSetKernelStream) :pointer
   (stream :pointer))
+
 
 (cffi:defcfun ("cublasSnrm2" cublasSnrm2) :float
   (n :int)
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasDnrm2" cublasDnrm2) :double
   (n :int)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasScnrm2" cublasScnrm2) :float
   (n :int)
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasDznrm2" cublasDznrm2) :double
   (n :int)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasSdot" cublasSdot) :float
   (n :int)
@@ -102,12 +113,14 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasDdot" cublasDdot) :double
   (n :int)
   (x :pointer)
   (incx :int)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasCdotu" cublasCdotu) :pointer
   (n :int)
@@ -116,12 +129,14 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasCdotc" cublasCdotc) :pointer
   (n :int)
   (x :pointer)
   (incx :int)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasZdotu" cublasZdotu) :pointer
   (n :int)
@@ -130,6 +145,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasZdotc" cublasZdotc) :pointer
   (n :int)
   (x :pointer)
@@ -137,11 +153,13 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasSscal" cublasSscal) :void
   (n :int)
   (alpha :float)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasDscal" cublasDscal) :void
   (n :int)
@@ -149,11 +167,13 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasCscal" cublasCscal) :void
   (n :int)
   (alpha :pointer)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasZscal" cublasZscal) :void
   (n :int)
@@ -161,17 +181,20 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasCsscal" cublasCsscal) :void
   (n :int)
   (alpha :float)
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasZdscal" cublasZdscal) :void
   (n :int)
   (alpha :double)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasSaxpy" cublasSaxpy) :void
   (n :int)
@@ -181,6 +204,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasDaxpy" cublasDaxpy) :void
   (n :int)
   (alpha :double)
@@ -188,6 +212,7 @@
   (incx :int)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasCaxpy" cublasCaxpy) :void
   (n :int)
@@ -197,6 +222,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasZaxpy" cublasZaxpy) :void
   (n :int)
   (alpha :pointer)
@@ -205,12 +231,14 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasScopy" cublasScopy) :void
   (n :int)
   (x :pointer)
   (incx :int)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasDcopy" cublasDcopy) :void
   (n :int)
@@ -219,12 +247,14 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasCcopy" cublasCcopy) :void
   (n :int)
   (x :pointer)
   (incx :int)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasZcopy" cublasZcopy) :void
   (n :int)
@@ -233,12 +263,14 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasSswap" cublasSswap) :void
   (n :int)
   (x :pointer)
   (incx :int)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasDswap" cublasDswap) :void
   (n :int)
@@ -247,12 +279,14 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasCswap" cublasCswap) :void
   (n :int)
   (x :pointer)
   (incx :int)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasZswap" cublasZswap) :void
   (n :int)
@@ -261,65 +295,78 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasIsamax" cublasIsamax) :int
   (n :int)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasIdamax" cublasIdamax) :int
   (n :int)
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasIcamax" cublasIcamax) :int
   (n :int)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasIzamax" cublasIzamax) :int
   (n :int)
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasIsamin" cublasIsamin) :int
   (n :int)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasIdamin" cublasIdamin) :int
   (n :int)
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasIcamin" cublasIcamin) :int
   (n :int)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasIzamin" cublasIzamin) :int
   (n :int)
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasSasum" cublasSasum) :float
   (n :int)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasDasum" cublasDasum) :double
   (n :int)
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasScasum" cublasScasum) :float
   (n :int)
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasDzasum" cublasDzasum) :double
   (n :int)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasSrot" cublasSrot) :void
   (n :int)
@@ -330,6 +377,7 @@
   (sc :float)
   (ss :float))
 
+
 (cffi:defcfun ("cublasDrot" cublasDrot) :void
   (n :int)
   (x :pointer)
@@ -338,6 +386,7 @@
   (incy :int)
   (sc :double)
   (ss :double))
+
 
 (cffi:defcfun ("cublasCrot" cublasCrot) :void
   (n :int)
@@ -348,6 +397,7 @@
   (c :float)
   (s :pointer))
 
+
 (cffi:defcfun ("cublasZrot" cublasZrot) :void
   (n :int)
   (x :pointer)
@@ -356,6 +406,7 @@
   (incy :int)
   (sc :double)
   (cs :pointer))
+
 
 (cffi:defcfun ("cublasCsrot" cublasCsrot) :void
   (n :int)
@@ -366,6 +417,7 @@
   (c :float)
   (s :float))
 
+
 (cffi:defcfun ("cublasZdrot" cublasZdrot) :void
   (n :int)
   (x :pointer)
@@ -375,11 +427,13 @@
   (c :double)
   (s :double))
 
+
 (cffi:defcfun ("cublasSrotg" cublasSrotg) :void
   (sa :pointer)
   (sb :pointer)
   (sc :pointer)
   (ss :pointer))
+
 
 (cffi:defcfun ("cublasDrotg" cublasDrotg) :void
   (sa :pointer)
@@ -387,17 +441,20 @@
   (sc :pointer)
   (ss :pointer))
 
+
 (cffi:defcfun ("cublasCrotg" cublasCrotg) :void
   (ca :pointer)
   (cb :pointer)
   (sc :pointer)
   (cs :pointer))
 
+
 (cffi:defcfun ("cublasZrotg" cublasZrotg) :void
   (ca :pointer)
   (cb :pointer)
   (sc :pointer)
   (cs :pointer))
+
 
 (cffi:defcfun ("cublasSrotm" cublasSrotm) :void
   (n :int)
@@ -407,6 +464,7 @@
   (incy :int)
   (sparam :pointer))
 
+
 (cffi:defcfun ("cublasDrotm" cublasDrotm) :void
   (n :int)
   (x :pointer)
@@ -415,6 +473,7 @@
   (incy :int)
   (sparam :pointer))
 
+
 (cffi:defcfun ("cublasSrotmg" cublasSrotmg) :void
   (sd1 :pointer)
   (sd2 :pointer)
@@ -422,12 +481,14 @@
   (sy1 :pointer)
   (sparam :pointer))
 
+
 (cffi:defcfun ("cublasDrotmg" cublasDrotmg) :void
   (sd1 :pointer)
   (sd2 :pointer)
   (sx1 :pointer)
   (sy1 :pointer)
   (sparam :pointer))
+
 
 (cffi:defcfun ("cublasSgemv" cublasSgemv) :void
   (trans :char)
@@ -442,6 +503,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasDgemv" cublasDgemv) :void
   (trans :char)
   (m :int)
@@ -454,6 +516,7 @@
   (beta :double)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasCgemv" cublasCgemv) :void
   (trans :char)
@@ -468,6 +531,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasZgemv" cublasZgemv) :void
   (trans :char)
   (m :int)
@@ -480,6 +544,7 @@
   (beta :pointer)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasSgbmv" cublasSgbmv) :void
   (trans :char)
@@ -496,6 +561,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasDgbmv" cublasDgbmv) :void
   (trans :char)
   (m :int)
@@ -510,6 +576,7 @@
   (beta :double)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasCgbmv" cublasCgbmv) :void
   (trans :char)
@@ -526,6 +593,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasZgbmv" cublasZgbmv) :void
   (trans :char)
   (m :int)
@@ -541,6 +609,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasStrmv" cublasStrmv) :void
   (uplo :char)
   (trans :char)
@@ -550,6 +619,7 @@
   (lda :int)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasDtrmv" cublasDtrmv) :void
   (uplo :char)
@@ -561,6 +631,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasCtrmv" cublasCtrmv) :void
   (uplo :char)
   (trans :char)
@@ -571,6 +642,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasZtrmv" cublasZtrmv) :void
   (uplo :char)
   (trans :char)
@@ -580,6 +652,7 @@
   (lda :int)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasStbmv" cublasStbmv) :void
   (uplo :char)
@@ -592,6 +665,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasDtbmv" cublasDtbmv) :void
   (uplo :char)
   (trans :char)
@@ -602,6 +676,7 @@
   (lda :int)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasCtbmv" cublasCtbmv) :void
   (uplo :char)
@@ -614,6 +689,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasZtbmv" cublasZtbmv) :void
   (uplo :char)
   (trans :char)
@@ -625,6 +701,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasStpmv" cublasStpmv) :void
   (uplo :char)
   (trans :char)
@@ -633,6 +710,7 @@
   (AP :pointer)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasDtpmv" cublasDtpmv) :void
   (uplo :char)
@@ -643,6 +721,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasCtpmv" cublasCtpmv) :void
   (uplo :char)
   (trans :char)
@@ -652,6 +731,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasZtpmv" cublasZtpmv) :void
   (uplo :char)
   (trans :char)
@@ -660,6 +740,7 @@
   (AP :pointer)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasStrsv" cublasStrsv) :void
   (uplo :char)
@@ -671,6 +752,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasDtrsv" cublasDtrsv) :void
   (uplo :char)
   (trans :char)
@@ -680,6 +762,7 @@
   (lda :int)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasCtrsv" cublasCtrsv) :void
   (uplo :char)
@@ -691,6 +774,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasZtrsv" cublasZtrsv) :void
   (uplo :char)
   (trans :char)
@@ -701,6 +785,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasStpsv" cublasStpsv) :void
   (uplo :char)
   (trans :char)
@@ -709,6 +794,7 @@
   (AP :pointer)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasDtpsv" cublasDtpsv) :void
   (uplo :char)
@@ -719,6 +805,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasCtpsv" cublasCtpsv) :void
   (uplo :char)
   (trans :char)
@@ -728,6 +815,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasZtpsv" cublasZtpsv) :void
   (uplo :char)
   (trans :char)
@@ -736,6 +824,7 @@
   (AP :pointer)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasStbsv" cublasStbsv) :void
   (uplo :char)
@@ -748,6 +837,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasDtbsv" cublasDtbsv) :void
   (uplo :char)
   (trans :char)
@@ -758,6 +848,7 @@
   (lda :int)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasCtbsv" cublasCtbsv) :void
   (uplo :char)
@@ -770,6 +861,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasZtbsv" cublasZtbsv) :void
   (uplo :char)
   (trans :char)
@@ -780,6 +872,7 @@
   (lda :int)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasSsymv" cublasSsymv) :void
   (uplo :char)
@@ -793,6 +886,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasDsymv" cublasDsymv) :void
   (uplo :char)
   (n :int)
@@ -804,6 +898,7 @@
   (beta :double)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasChemv" cublasChemv) :void
   (uplo :char)
@@ -817,6 +912,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasZhemv" cublasZhemv) :void
   (uplo :char)
   (n :int)
@@ -828,6 +924,7 @@
   (beta :pointer)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasSsbmv" cublasSsbmv) :void
   (uplo :char)
@@ -842,6 +939,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasDsbmv" cublasDsbmv) :void
   (uplo :char)
   (n :int)
@@ -854,6 +952,7 @@
   (beta :double)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasChbmv" cublasChbmv) :void
   (uplo :char)
@@ -868,6 +967,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasZhbmv" cublasZhbmv) :void
   (uplo :char)
   (n :int)
@@ -881,6 +981,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasSspmv" cublasSspmv) :void
   (uplo :char)
   (n :int)
@@ -891,6 +992,7 @@
   (beta :float)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasDspmv" cublasDspmv) :void
   (uplo :char)
@@ -903,6 +1005,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasChpmv" cublasChpmv) :void
   (uplo :char)
   (n :int)
@@ -913,6 +1016,7 @@
   (beta :pointer)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasZhpmv" cublasZhpmv) :void
   (uplo :char)
@@ -925,6 +1029,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasSger" cublasSger) :void
   (m :int)
   (n :int)
@@ -935,6 +1040,7 @@
   (incy :int)
   (A :pointer)
   (lda :int))
+
 
 (cffi:defcfun ("cublasDger" cublasDger) :void
   (m :int)
@@ -947,6 +1053,7 @@
   (A :pointer)
   (lda :int))
 
+
 (cffi:defcfun ("cublasCgeru" cublasCgeru) :void
   (m :int)
   (n :int)
@@ -957,6 +1064,7 @@
   (incy :int)
   (A :pointer)
   (lda :int))
+
 
 (cffi:defcfun ("cublasCgerc" cublasCgerc) :void
   (m :int)
@@ -969,6 +1077,7 @@
   (A :pointer)
   (lda :int))
 
+
 (cffi:defcfun ("cublasZgeru" cublasZgeru) :void
   (m :int)
   (n :int)
@@ -979,6 +1088,7 @@
   (incy :int)
   (A :pointer)
   (lda :int))
+
 
 (cffi:defcfun ("cublasZgerc" cublasZgerc) :void
   (m :int)
@@ -991,6 +1101,7 @@
   (A :pointer)
   (lda :int))
 
+
 (cffi:defcfun ("cublasSsyr" cublasSsyr) :void
   (uplo :char)
   (n :int)
@@ -999,6 +1110,7 @@
   (incx :int)
   (A :pointer)
   (lda :int))
+
 
 (cffi:defcfun ("cublasDsyr" cublasDsyr) :void
   (uplo :char)
@@ -1009,6 +1121,7 @@
   (A :pointer)
   (lda :int))
 
+
 (cffi:defcfun ("cublasCher" cublasCher) :void
   (uplo :char)
   (n :int)
@@ -1017,6 +1130,7 @@
   (incx :int)
   (A :pointer)
   (lda :int))
+
 
 (cffi:defcfun ("cublasZher" cublasZher) :void
   (uplo :char)
@@ -1027,6 +1141,7 @@
   (A :pointer)
   (lda :int))
 
+
 (cffi:defcfun ("cublasSspr" cublasSspr) :void
   (uplo :char)
   (n :int)
@@ -1034,6 +1149,7 @@
   (x :pointer)
   (incx :int)
   (AP :pointer))
+
 
 (cffi:defcfun ("cublasDspr" cublasDspr) :void
   (uplo :char)
@@ -1043,6 +1159,7 @@
   (incx :int)
   (AP :pointer))
 
+
 (cffi:defcfun ("cublasChpr" cublasChpr) :void
   (uplo :char)
   (n :int)
@@ -1051,6 +1168,7 @@
   (incx :int)
   (AP :pointer))
 
+
 (cffi:defcfun ("cublasZhpr" cublasZhpr) :void
   (uplo :char)
   (n :int)
@@ -1058,6 +1176,7 @@
   (x :pointer)
   (incx :int)
   (AP :pointer))
+
 
 (cffi:defcfun ("cublasSsyr2" cublasSsyr2) :void
   (uplo :char)
@@ -1070,6 +1189,7 @@
   (A :pointer)
   (lda :int))
 
+
 (cffi:defcfun ("cublasDsyr2" cublasDsyr2) :void
   (uplo :char)
   (n :int)
@@ -1080,6 +1200,7 @@
   (incy :int)
   (A :pointer)
   (lda :int))
+
 
 (cffi:defcfun ("cublasCher2" cublasCher2) :void
   (uplo :char)
@@ -1092,6 +1213,7 @@
   (A :pointer)
   (lda :int))
 
+
 (cffi:defcfun ("cublasZher2" cublasZher2) :void
   (uplo :char)
   (n :int)
@@ -1103,6 +1225,7 @@
   (A :pointer)
   (lda :int))
 
+
 (cffi:defcfun ("cublasSspr2" cublasSspr2) :void
   (uplo :char)
   (n :int)
@@ -1112,6 +1235,7 @@
   (y :pointer)
   (incy :int)
   (AP :pointer))
+
 
 (cffi:defcfun ("cublasDspr2" cublasDspr2) :void
   (uplo :char)
@@ -1123,6 +1247,7 @@
   (incy :int)
   (AP :pointer))
 
+
 (cffi:defcfun ("cublasChpr2" cublasChpr2) :void
   (uplo :char)
   (n :int)
@@ -1133,6 +1258,7 @@
   (incy :int)
   (AP :pointer))
 
+
 (cffi:defcfun ("cublasZhpr2" cublasZhpr2) :void
   (uplo :char)
   (n :int)
@@ -1142,6 +1268,7 @@
   (y :pointer)
   (incy :int)
   (AP :pointer))
+
 
 (cffi:defcfun ("cublasSgemm" cublasSgemm) :void
   (transa :char)
@@ -1158,6 +1285,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasDgemm" cublasDgemm) :void
   (transa :char)
   (transb :char)
@@ -1172,6 +1300,7 @@
   (beta :double)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasCgemm" cublasCgemm) :void
   (transa :char)
@@ -1188,6 +1317,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasZgemm" cublasZgemm) :void
   (transa :char)
   (transb :char)
@@ -1203,6 +1333,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasSsyrk" cublasSsyrk) :void
   (uplo :char)
   (trans :char)
@@ -1214,6 +1345,7 @@
   (beta :float)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasDsyrk" cublasDsyrk) :void
   (uplo :char)
@@ -1227,6 +1359,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasCsyrk" cublasCsyrk) :void
   (uplo :char)
   (trans :char)
@@ -1238,6 +1371,7 @@
   (beta :pointer)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasZsyrk" cublasZsyrk) :void
   (uplo :char)
@@ -1251,6 +1385,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasCherk" cublasCherk) :void
   (uplo :char)
   (trans :char)
@@ -1263,6 +1398,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasZherk" cublasZherk) :void
   (uplo :char)
   (trans :char)
@@ -1274,6 +1410,7 @@
   (beta :double)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasSsyr2k" cublasSsyr2k) :void
   (uplo :char)
@@ -1289,6 +1426,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasDsyr2k" cublasDsyr2k) :void
   (uplo :char)
   (trans :char)
@@ -1302,6 +1440,7 @@
   (beta :double)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasCsyr2k" cublasCsyr2k) :void
   (uplo :char)
@@ -1317,6 +1456,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasZsyr2k" cublasZsyr2k) :void
   (uplo :char)
   (trans :char)
@@ -1330,6 +1470,7 @@
   (beta :pointer)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasCher2k" cublasCher2k) :void
   (uplo :char)
@@ -1345,6 +1486,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasZher2k" cublasZher2k) :void
   (uplo :char)
   (trans :char)
@@ -1358,6 +1500,7 @@
   (beta :double)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasSsymm" cublasSsymm) :void
   (side :char)
@@ -1373,6 +1516,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasDsymm" cublasDsymm) :void
   (side :char)
   (uplo :char)
@@ -1386,6 +1530,7 @@
   (beta :double)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasCsymm" cublasCsymm) :void
   (side :char)
@@ -1401,6 +1546,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasZsymm" cublasZsymm) :void
   (side :char)
   (uplo :char)
@@ -1414,6 +1560,7 @@
   (beta :pointer)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasChemm" cublasChemm) :void
   (side :char)
@@ -1429,6 +1576,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasZhemm" cublasZhemm) :void
   (side :char)
   (uplo :char)
@@ -1443,6 +1591,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasStrsm" cublasStrsm) :void
   (side :char)
   (uplo :char)
@@ -1455,6 +1604,7 @@
   (lda :int)
   (B :pointer)
   (ldb :int))
+
 
 (cffi:defcfun ("cublasDtrsm" cublasDtrsm) :void
   (side :char)
@@ -1469,6 +1619,7 @@
   (B :pointer)
   (ldb :int))
 
+
 (cffi:defcfun ("cublasCtrsm" cublasCtrsm) :void
   (side :char)
   (uplo :char)
@@ -1481,6 +1632,7 @@
   (lda :int)
   (B :pointer)
   (ldb :int))
+
 
 (cffi:defcfun ("cublasZtrsm" cublasZtrsm) :void
   (side :char)
@@ -1495,6 +1647,7 @@
   (B :pointer)
   (ldb :int))
 
+
 (cffi:defcfun ("cublasStrmm" cublasStrmm) :void
   (side :char)
   (uplo :char)
@@ -1507,6 +1660,7 @@
   (lda :int)
   (B :pointer)
   (ldb :int))
+
 
 (cffi:defcfun ("cublasDtrmm" cublasDtrmm) :void
   (side :char)
@@ -1521,6 +1675,7 @@
   (B :pointer)
   (ldb :int))
 
+
 (cffi:defcfun ("cublasCtrmm" cublasCtrmm) :void
   (side :char)
   (uplo :char)
@@ -1533,6 +1688,7 @@
   (lda :int)
   (B :pointer)
   (ldb :int))
+
 
 (cffi:defcfun ("cublasZtrmm" cublasZtrmm) :void
   (side :char)
@@ -1547,6 +1703,7 @@
   (B :pointer)
   (ldb :int))
 
+
 (cffi:defcenum cublasStatus_t
 	(:CUBLAS_STATUS_SUCCESS #.0)
 	(:CUBLAS_STATUS_NOT_INITIALIZED #.1)
@@ -1559,30 +1716,37 @@
 	(:CUBLAS_STATUS_NOT_SUPPORTED #.15)
 	(:CUBLAS_STATUS_LICENSE_ERROR #.16))
 
+
 (cffi:defcenum cublasFillMode_t
 	(:CUBLAS_FILL_MODE_LOWER #.0)
 	(:CUBLAS_FILL_MODE_UPPER #.1))
+
 
 (cffi:defcenum cublasDiagType_t
 	(:CUBLAS_DIAG_NON_UNIT #.0)
 	(:CUBLAS_DIAG_UNIT #.1))
 
+
 (cffi:defcenum cublasSideMode_t
 	(:CUBLAS_SIDE_LEFT #.0)
 	(:CUBLAS_SIDE_RIGHT #.1))
+
 
 (cffi:defcenum cublasOperation_t
 	(:CUBLAS_OP_N #.0)
 	(:CUBLAS_OP_T #.1)
 	(:CUBLAS_OP_C #.2))
 
+
 (cffi:defcenum cublasPointerMode_t
 	(:CUBLAS_POINTER_MODE_HOST #.0)
 	(:CUBLAS_POINTER_MODE_DEVICE #.1))
 
+
 (cffi:defcenum cublasAtomicsMode_t
 	(:CUBLAS_ATOMICS_NOT_ALLOWED #.0)
 	(:CUBLAS_ATOMICS_ALLOWED #.1))
+
 
 (cffi:defcenum cublasGemmAlgo_t
 	(:CUBLAS_GEMM_DFALT #.-1)
@@ -1595,43 +1759,54 @@
 	(:CUBLAS_GEMM_ALGO6 #.6)
 	(:CUBLAS_GEMM_ALGO7 #.7))
 
+
 (cffi:defcfun ("cublasCreate_v2" cublasCreate_v2) cublasStatus_t
   (handle :pointer))
 
+
 (cffi:defcfun ("cublasDestroy_v2" cublasDestroy_v2) cublasStatus_t
   (handle :pointer))
+
 
 (cffi:defcfun ("cublasGetVersion_v2" cublasGetVersion_v2) cublasStatus_t
   (handle :pointer)
   (version :pointer))
 
+
 (cffi:defcfun ("cublasGetProperty" cublasGetProperty) cublasStatus_t
   (type :pointer)
   (value :pointer))
+
 
 (cffi:defcfun ("cublasSetStream_v2" cublasSetStream_v2) cublasStatus_t
   (handle :pointer)
   (streamId :pointer))
 
+
 (cffi:defcfun ("cublasGetStream_v2" cublasGetStream_v2) cublasStatus_t
   (handle :pointer)
   (streamId :pointer))
+
 
 (cffi:defcfun ("cublasGetPointerMode_v2" cublasGetPointerMode_v2) cublasStatus_t
   (handle :pointer)
   (mode :pointer))
 
+
 (cffi:defcfun ("cublasSetPointerMode_v2" cublasSetPointerMode_v2) cublasStatus_t
   (handle :pointer)
   (mode cublasPointerMode_t))
+
 
 (cffi:defcfun ("cublasGetAtomicsMode" cublasGetAtomicsMode) cublasStatus_t
   (handle :pointer)
   (mode :pointer))
 
+
 (cffi:defcfun ("cublasSetAtomicsMode" cublasSetAtomicsMode) cublasStatus_t
   (handle :pointer)
   (mode cublasAtomicsMode_t))
+
 
 (cffi:defcfun ("cublasSetVector" cublasSetVector) cublasStatus_t
   (n :int)
@@ -1641,6 +1816,7 @@
   (devicePtr :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasGetVector" cublasGetVector) cublasStatus_t
   (n :int)
   (elemSize :int)
@@ -1648,6 +1824,7 @@
   (incx :int)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasSetMatrix" cublasSetMatrix) cublasStatus_t
   (rows :int)
@@ -1658,6 +1835,7 @@
   (B :pointer)
   (ldb :int))
 
+
 (cffi:defcfun ("cublasGetMatrix" cublasGetMatrix) cublasStatus_t
   (rows :int)
   (cols :int)
@@ -1666,6 +1844,7 @@
   (lda :int)
   (B :pointer)
   (ldb :int))
+
 
 (cffi:defcfun ("cublasSetVectorAsync" cublasSetVectorAsync) cublasStatus_t
   (n :int)
@@ -1676,6 +1855,7 @@
   (incy :int)
   (stream :pointer))
 
+
 (cffi:defcfun ("cublasGetVectorAsync" cublasGetVectorAsync) cublasStatus_t
   (n :int)
   (elemSize :int)
@@ -1684,6 +1864,7 @@
   (hostPtr :pointer)
   (incy :int)
   (stream :pointer))
+
 
 (cffi:defcfun ("cublasSetMatrixAsync" cublasSetMatrixAsync) cublasStatus_t
   (rows :int)
@@ -1695,6 +1876,7 @@
   (ldb :int)
   (stream :pointer))
 
+
 (cffi:defcfun ("cublasGetMatrixAsync" cublasGetMatrixAsync) cublasStatus_t
   (rows :int)
   (cols :int)
@@ -1705,9 +1887,11 @@
   (ldb :int)
   (stream :pointer))
 
+
 (cffi:defcfun ("cublasXerbla" cublasXerbla) :void
   (srName :string)
   (info :int))
+
 
 (cffi:defcfun ("cublasNrm2Ex" cublasNrm2Ex) cublasStatus_t
   (handle :pointer)
@@ -1719,12 +1903,14 @@
   (resultType :pointer)
   (executionType :pointer))
 
+
 (cffi:defcfun ("cublasSnrm2_v2" cublasSnrm2_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
   (x :pointer)
   (incx :int)
   (result :pointer))
+
 
 (cffi:defcfun ("cublasDnrm2_v2" cublasDnrm2_v2) cublasStatus_t
   (handle :pointer)
@@ -1733,6 +1919,7 @@
   (incx :int)
   (result :pointer))
 
+
 (cffi:defcfun ("cublasScnrm2_v2" cublasScnrm2_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -1740,12 +1927,14 @@
   (incx :int)
   (result :pointer))
 
+
 (cffi:defcfun ("cublasDznrm2_v2" cublasDznrm2_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
   (x :pointer)
   (incx :int)
   (result :pointer))
+
 
 (cffi:defcfun ("cublasDotEx" cublasDotEx) cublasStatus_t
   (handle :pointer)
@@ -1760,6 +1949,7 @@
   (resultType :pointer)
   (executionType :pointer))
 
+
 (cffi:defcfun ("cublasDotcEx" cublasDotcEx) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -1773,6 +1963,7 @@
   (resultType :pointer)
   (executionType :pointer))
 
+
 (cffi:defcfun ("cublasSdot_v2" cublasSdot_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -1781,6 +1972,7 @@
   (y :pointer)
   (incy :int)
   (result :pointer))
+
 
 (cffi:defcfun ("cublasDdot_v2" cublasDdot_v2) cublasStatus_t
   (handle :pointer)
@@ -1791,6 +1983,7 @@
   (incy :int)
   (result :pointer))
 
+
 (cffi:defcfun ("cublasCdotu_v2" cublasCdotu_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -1799,6 +1992,7 @@
   (y :pointer)
   (incy :int)
   (result :pointer))
+
 
 (cffi:defcfun ("cublasCdotc_v2" cublasCdotc_v2) cublasStatus_t
   (handle :pointer)
@@ -1809,6 +2003,7 @@
   (incy :int)
   (result :pointer))
 
+
 (cffi:defcfun ("cublasZdotu_v2" cublasZdotu_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -1818,6 +2013,7 @@
   (incy :int)
   (result :pointer))
 
+
 (cffi:defcfun ("cublasZdotc_v2" cublasZdotc_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -1826,6 +2022,7 @@
   (y :pointer)
   (incy :int)
   (result :pointer))
+
 
 (cffi:defcfun ("cublasScalEx" cublasScalEx) cublasStatus_t
   (handle :pointer)
@@ -1837,12 +2034,14 @@
   (incx :int)
   (executionType :pointer))
 
+
 (cffi:defcfun ("cublasSscal_v2" cublasSscal_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
   (alpha :pointer)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasDscal_v2" cublasDscal_v2) cublasStatus_t
   (handle :pointer)
@@ -1851,12 +2050,14 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasCscal_v2" cublasCscal_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
   (alpha :pointer)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasCsscal_v2" cublasCsscal_v2) cublasStatus_t
   (handle :pointer)
@@ -1865,6 +2066,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasZscal_v2" cublasZscal_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -1872,12 +2074,14 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasZdscal_v2" cublasZdscal_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
   (alpha :pointer)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasAxpyEx" cublasAxpyEx) cublasStatus_t
   (handle :pointer)
@@ -1892,6 +2096,7 @@
   (incy :int)
   (executiontype :pointer))
 
+
 (cffi:defcfun ("cublasSaxpy_v2" cublasSaxpy_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -1900,6 +2105,7 @@
   (incx :int)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasDaxpy_v2" cublasDaxpy_v2) cublasStatus_t
   (handle :pointer)
@@ -1910,6 +2116,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasCaxpy_v2" cublasCaxpy_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -1918,6 +2125,7 @@
   (incx :int)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasZaxpy_v2" cublasZaxpy_v2) cublasStatus_t
   (handle :pointer)
@@ -1928,6 +2136,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasScopy_v2" cublasScopy_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -1935,6 +2144,7 @@
   (incx :int)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasDcopy_v2" cublasDcopy_v2) cublasStatus_t
   (handle :pointer)
@@ -1944,6 +2154,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasCcopy_v2" cublasCcopy_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -1951,6 +2162,7 @@
   (incx :int)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasZcopy_v2" cublasZcopy_v2) cublasStatus_t
   (handle :pointer)
@@ -1960,6 +2172,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasSswap_v2" cublasSswap_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -1967,6 +2180,7 @@
   (incx :int)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasDswap_v2" cublasDswap_v2) cublasStatus_t
   (handle :pointer)
@@ -1976,6 +2190,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasCswap_v2" cublasCswap_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -1983,6 +2198,7 @@
   (incx :int)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasZswap_v2" cublasZswap_v2) cublasStatus_t
   (handle :pointer)
@@ -1992,12 +2208,14 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasIsamax_v2" cublasIsamax_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
   (x :pointer)
   (incx :int)
   (result :pointer))
+
 
 (cffi:defcfun ("cublasIdamax_v2" cublasIdamax_v2) cublasStatus_t
   (handle :pointer)
@@ -2006,12 +2224,14 @@
   (incx :int)
   (result :pointer))
 
+
 (cffi:defcfun ("cublasIcamax_v2" cublasIcamax_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
   (x :pointer)
   (incx :int)
   (result :pointer))
+
 
 (cffi:defcfun ("cublasIzamax_v2" cublasIzamax_v2) cublasStatus_t
   (handle :pointer)
@@ -2020,12 +2240,14 @@
   (incx :int)
   (result :pointer))
 
+
 (cffi:defcfun ("cublasIsamin_v2" cublasIsamin_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
   (x :pointer)
   (incx :int)
   (result :pointer))
+
 
 (cffi:defcfun ("cublasIdamin_v2" cublasIdamin_v2) cublasStatus_t
   (handle :pointer)
@@ -2034,12 +2256,14 @@
   (incx :int)
   (result :pointer))
 
+
 (cffi:defcfun ("cublasIcamin_v2" cublasIcamin_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
   (x :pointer)
   (incx :int)
   (result :pointer))
+
 
 (cffi:defcfun ("cublasIzamin_v2" cublasIzamin_v2) cublasStatus_t
   (handle :pointer)
@@ -2048,12 +2272,14 @@
   (incx :int)
   (result :pointer))
 
+
 (cffi:defcfun ("cublasSasum_v2" cublasSasum_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
   (x :pointer)
   (incx :int)
   (result :pointer))
+
 
 (cffi:defcfun ("cublasDasum_v2" cublasDasum_v2) cublasStatus_t
   (handle :pointer)
@@ -2062,6 +2288,7 @@
   (incx :int)
   (result :pointer))
 
+
 (cffi:defcfun ("cublasScasum_v2" cublasScasum_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -2069,12 +2296,14 @@
   (incx :int)
   (result :pointer))
 
+
 (cffi:defcfun ("cublasDzasum_v2" cublasDzasum_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
   (x :pointer)
   (incx :int)
   (result :pointer))
+
 
 (cffi:defcfun ("cublasSrot_v2" cublasSrot_v2) cublasStatus_t
   (handle :pointer)
@@ -2086,6 +2315,7 @@
   (c :pointer)
   (s :pointer))
 
+
 (cffi:defcfun ("cublasDrot_v2" cublasDrot_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -2095,6 +2325,7 @@
   (incy :int)
   (c :pointer)
   (s :pointer))
+
 
 (cffi:defcfun ("cublasCrot_v2" cublasCrot_v2) cublasStatus_t
   (handle :pointer)
@@ -2106,6 +2337,7 @@
   (c :pointer)
   (s :pointer))
 
+
 (cffi:defcfun ("cublasCsrot_v2" cublasCsrot_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -2115,6 +2347,7 @@
   (incy :int)
   (c :pointer)
   (s :pointer))
+
 
 (cffi:defcfun ("cublasZrot_v2" cublasZrot_v2) cublasStatus_t
   (handle :pointer)
@@ -2126,6 +2359,7 @@
   (c :pointer)
   (s :pointer))
 
+
 (cffi:defcfun ("cublasZdrot_v2" cublasZdrot_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -2136,12 +2370,14 @@
   (c :pointer)
   (s :pointer))
 
+
 (cffi:defcfun ("cublasSrotg_v2" cublasSrotg_v2) cublasStatus_t
   (handle :pointer)
   (a :pointer)
   (b :pointer)
   (c :pointer)
   (s :pointer))
+
 
 (cffi:defcfun ("cublasDrotg_v2" cublasDrotg_v2) cublasStatus_t
   (handle :pointer)
@@ -2150,6 +2386,7 @@
   (c :pointer)
   (s :pointer))
 
+
 (cffi:defcfun ("cublasCrotg_v2" cublasCrotg_v2) cublasStatus_t
   (handle :pointer)
   (a :pointer)
@@ -2157,12 +2394,14 @@
   (c :pointer)
   (s :pointer))
 
+
 (cffi:defcfun ("cublasZrotg_v2" cublasZrotg_v2) cublasStatus_t
   (handle :pointer)
   (a :pointer)
   (b :pointer)
   (c :pointer)
   (s :pointer))
+
 
 (cffi:defcfun ("cublasSrotm_v2" cublasSrotm_v2) cublasStatus_t
   (handle :pointer)
@@ -2173,6 +2412,7 @@
   (incy :int)
   (param :pointer))
 
+
 (cffi:defcfun ("cublasDrotm_v2" cublasDrotm_v2) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -2182,6 +2422,7 @@
   (incy :int)
   (param :pointer))
 
+
 (cffi:defcfun ("cublasSrotmg_v2" cublasSrotmg_v2) cublasStatus_t
   (handle :pointer)
   (d1 :pointer)
@@ -2190,6 +2431,7 @@
   (y1 :pointer)
   (param :pointer))
 
+
 (cffi:defcfun ("cublasDrotmg_v2" cublasDrotmg_v2) cublasStatus_t
   (handle :pointer)
   (d1 :pointer)
@@ -2197,6 +2439,7 @@
   (x1 :pointer)
   (y1 :pointer)
   (param :pointer))
+
 
 (cffi:defcfun ("cublasSgemv_v2" cublasSgemv_v2) cublasStatus_t
   (handle :pointer)
@@ -2212,6 +2455,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasDgemv_v2" cublasDgemv_v2) cublasStatus_t
   (handle :pointer)
   (trans cublasOperation_t)
@@ -2225,6 +2469,7 @@
   (beta :pointer)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasCgemv_v2" cublasCgemv_v2) cublasStatus_t
   (handle :pointer)
@@ -2240,6 +2485,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasZgemv_v2" cublasZgemv_v2) cublasStatus_t
   (handle :pointer)
   (trans cublasOperation_t)
@@ -2253,6 +2499,7 @@
   (beta :pointer)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasSgbmv_v2" cublasSgbmv_v2) cublasStatus_t
   (handle :pointer)
@@ -2270,6 +2517,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasDgbmv_v2" cublasDgbmv_v2) cublasStatus_t
   (handle :pointer)
   (trans cublasOperation_t)
@@ -2285,6 +2533,7 @@
   (beta :pointer)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasCgbmv_v2" cublasCgbmv_v2) cublasStatus_t
   (handle :pointer)
@@ -2302,6 +2551,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasZgbmv_v2" cublasZgbmv_v2) cublasStatus_t
   (handle :pointer)
   (trans cublasOperation_t)
@@ -2318,6 +2568,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasStrmv_v2" cublasStrmv_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2328,6 +2579,7 @@
   (lda :int)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasDtrmv_v2" cublasDtrmv_v2) cublasStatus_t
   (handle :pointer)
@@ -2340,6 +2592,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasCtrmv_v2" cublasCtrmv_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2351,6 +2604,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasZtrmv_v2" cublasZtrmv_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2361,6 +2615,7 @@
   (lda :int)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasStbmv_v2" cublasStbmv_v2) cublasStatus_t
   (handle :pointer)
@@ -2374,6 +2629,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasDtbmv_v2" cublasDtbmv_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2385,6 +2641,7 @@
   (lda :int)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasCtbmv_v2" cublasCtbmv_v2) cublasStatus_t
   (handle :pointer)
@@ -2398,6 +2655,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasZtbmv_v2" cublasZtbmv_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2410,6 +2668,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasStpmv_v2" cublasStpmv_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2419,6 +2678,7 @@
   (AP :pointer)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasDtpmv_v2" cublasDtpmv_v2) cublasStatus_t
   (handle :pointer)
@@ -2430,6 +2690,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasCtpmv_v2" cublasCtpmv_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2440,6 +2701,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasZtpmv_v2" cublasZtpmv_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2449,6 +2711,7 @@
   (AP :pointer)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasStrsv_v2" cublasStrsv_v2) cublasStatus_t
   (handle :pointer)
@@ -2461,6 +2724,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasDtrsv_v2" cublasDtrsv_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2471,6 +2735,7 @@
   (lda :int)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasCtrsv_v2" cublasCtrsv_v2) cublasStatus_t
   (handle :pointer)
@@ -2483,6 +2748,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasZtrsv_v2" cublasZtrsv_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2494,6 +2760,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasStpsv_v2" cublasStpsv_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2503,6 +2770,7 @@
   (AP :pointer)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasDtpsv_v2" cublasDtpsv_v2) cublasStatus_t
   (handle :pointer)
@@ -2514,6 +2782,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasCtpsv_v2" cublasCtpsv_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2524,6 +2793,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasZtpsv_v2" cublasZtpsv_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2533,6 +2803,7 @@
   (AP :pointer)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasStbsv_v2" cublasStbsv_v2) cublasStatus_t
   (handle :pointer)
@@ -2546,6 +2817,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasDtbsv_v2" cublasDtbsv_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2557,6 +2829,7 @@
   (lda :int)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasCtbsv_v2" cublasCtbsv_v2) cublasStatus_t
   (handle :pointer)
@@ -2570,6 +2843,7 @@
   (x :pointer)
   (incx :int))
 
+
 (cffi:defcfun ("cublasZtbsv_v2" cublasZtbsv_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2581,6 +2855,7 @@
   (lda :int)
   (x :pointer)
   (incx :int))
+
 
 (cffi:defcfun ("cublasSsymv_v2" cublasSsymv_v2) cublasStatus_t
   (handle :pointer)
@@ -2595,6 +2870,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasDsymv_v2" cublasDsymv_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2607,6 +2883,7 @@
   (beta :pointer)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasCsymv_v2" cublasCsymv_v2) cublasStatus_t
   (handle :pointer)
@@ -2621,6 +2898,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasZsymv_v2" cublasZsymv_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2633,6 +2911,7 @@
   (beta :pointer)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasChemv_v2" cublasChemv_v2) cublasStatus_t
   (handle :pointer)
@@ -2647,6 +2926,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasZhemv_v2" cublasZhemv_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2659,6 +2939,7 @@
   (beta :pointer)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasSsbmv_v2" cublasSsbmv_v2) cublasStatus_t
   (handle :pointer)
@@ -2674,6 +2955,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasDsbmv_v2" cublasDsbmv_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2687,6 +2969,7 @@
   (beta :pointer)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasChbmv_v2" cublasChbmv_v2) cublasStatus_t
   (handle :pointer)
@@ -2702,6 +2985,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasZhbmv_v2" cublasZhbmv_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2716,6 +3000,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasSspmv_v2" cublasSspmv_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2727,6 +3012,7 @@
   (beta :pointer)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasDspmv_v2" cublasDspmv_v2) cublasStatus_t
   (handle :pointer)
@@ -2740,6 +3026,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasChpmv_v2" cublasChpmv_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2751,6 +3038,7 @@
   (beta :pointer)
   (y :pointer)
   (incy :int))
+
 
 (cffi:defcfun ("cublasZhpmv_v2" cublasZhpmv_v2) cublasStatus_t
   (handle :pointer)
@@ -2764,6 +3052,7 @@
   (y :pointer)
   (incy :int))
 
+
 (cffi:defcfun ("cublasSger_v2" cublasSger_v2) cublasStatus_t
   (handle :pointer)
   (m :int)
@@ -2775,6 +3064,7 @@
   (incy :int)
   (A :pointer)
   (lda :int))
+
 
 (cffi:defcfun ("cublasDger_v2" cublasDger_v2) cublasStatus_t
   (handle :pointer)
@@ -2788,6 +3078,7 @@
   (A :pointer)
   (lda :int))
 
+
 (cffi:defcfun ("cublasCgeru_v2" cublasCgeru_v2) cublasStatus_t
   (handle :pointer)
   (m :int)
@@ -2799,6 +3090,7 @@
   (incy :int)
   (A :pointer)
   (lda :int))
+
 
 (cffi:defcfun ("cublasCgerc_v2" cublasCgerc_v2) cublasStatus_t
   (handle :pointer)
@@ -2812,6 +3104,7 @@
   (A :pointer)
   (lda :int))
 
+
 (cffi:defcfun ("cublasZgeru_v2" cublasZgeru_v2) cublasStatus_t
   (handle :pointer)
   (m :int)
@@ -2823,6 +3116,7 @@
   (incy :int)
   (A :pointer)
   (lda :int))
+
 
 (cffi:defcfun ("cublasZgerc_v2" cublasZgerc_v2) cublasStatus_t
   (handle :pointer)
@@ -2836,6 +3130,7 @@
   (A :pointer)
   (lda :int))
 
+
 (cffi:defcfun ("cublasSsyr_v2" cublasSsyr_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2845,6 +3140,7 @@
   (incx :int)
   (A :pointer)
   (lda :int))
+
 
 (cffi:defcfun ("cublasDsyr_v2" cublasDsyr_v2) cublasStatus_t
   (handle :pointer)
@@ -2856,6 +3152,7 @@
   (A :pointer)
   (lda :int))
 
+
 (cffi:defcfun ("cublasCsyr_v2" cublasCsyr_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2865,6 +3162,7 @@
   (incx :int)
   (A :pointer)
   (lda :int))
+
 
 (cffi:defcfun ("cublasZsyr_v2" cublasZsyr_v2) cublasStatus_t
   (handle :pointer)
@@ -2876,6 +3174,7 @@
   (A :pointer)
   (lda :int))
 
+
 (cffi:defcfun ("cublasCher_v2" cublasCher_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2885,6 +3184,7 @@
   (incx :int)
   (A :pointer)
   (lda :int))
+
 
 (cffi:defcfun ("cublasZher_v2" cublasZher_v2) cublasStatus_t
   (handle :pointer)
@@ -2896,6 +3196,7 @@
   (A :pointer)
   (lda :int))
 
+
 (cffi:defcfun ("cublasSspr_v2" cublasSspr_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2904,6 +3205,7 @@
   (x :pointer)
   (incx :int)
   (AP :pointer))
+
 
 (cffi:defcfun ("cublasDspr_v2" cublasDspr_v2) cublasStatus_t
   (handle :pointer)
@@ -2914,6 +3216,7 @@
   (incx :int)
   (AP :pointer))
 
+
 (cffi:defcfun ("cublasChpr_v2" cublasChpr_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2923,6 +3226,7 @@
   (incx :int)
   (AP :pointer))
 
+
 (cffi:defcfun ("cublasZhpr_v2" cublasZhpr_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2931,6 +3235,7 @@
   (x :pointer)
   (incx :int)
   (AP :pointer))
+
 
 (cffi:defcfun ("cublasSsyr2_v2" cublasSsyr2_v2) cublasStatus_t
   (handle :pointer)
@@ -2944,6 +3249,7 @@
   (A :pointer)
   (lda :int))
 
+
 (cffi:defcfun ("cublasDsyr2_v2" cublasDsyr2_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2955,6 +3261,7 @@
   (incy :int)
   (A :pointer)
   (lda :int))
+
 
 (cffi:defcfun ("cublasCsyr2_v2" cublasCsyr2_v2) cublasStatus_t
   (handle :pointer)
@@ -2968,6 +3275,7 @@
   (A :pointer)
   (lda :int))
 
+
 (cffi:defcfun ("cublasZsyr2_v2" cublasZsyr2_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -2979,6 +3287,7 @@
   (incy :int)
   (A :pointer)
   (lda :int))
+
 
 (cffi:defcfun ("cublasCher2_v2" cublasCher2_v2) cublasStatus_t
   (handle :pointer)
@@ -2992,6 +3301,7 @@
   (A :pointer)
   (lda :int))
 
+
 (cffi:defcfun ("cublasZher2_v2" cublasZher2_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -3004,6 +3314,7 @@
   (A :pointer)
   (lda :int))
 
+
 (cffi:defcfun ("cublasSspr2_v2" cublasSspr2_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -3014,6 +3325,7 @@
   (y :pointer)
   (incy :int)
   (AP :pointer))
+
 
 (cffi:defcfun ("cublasDspr2_v2" cublasDspr2_v2) cublasStatus_t
   (handle :pointer)
@@ -3026,6 +3338,7 @@
   (incy :int)
   (AP :pointer))
 
+
 (cffi:defcfun ("cublasChpr2_v2" cublasChpr2_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -3037,6 +3350,7 @@
   (incy :int)
   (AP :pointer))
 
+
 (cffi:defcfun ("cublasZhpr2_v2" cublasZhpr2_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -3047,6 +3361,7 @@
   (y :pointer)
   (incy :int)
   (AP :pointer))
+
 
 (cffi:defcfun ("cublasSgemm_v2" cublasSgemm_v2) cublasStatus_t
   (handle :pointer)
@@ -3064,6 +3379,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasDgemm_v2" cublasDgemm_v2) cublasStatus_t
   (handle :pointer)
   (transa cublasOperation_t)
@@ -3079,6 +3395,7 @@
   (beta :pointer)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasCgemm_v2" cublasCgemm_v2) cublasStatus_t
   (handle :pointer)
@@ -3096,6 +3413,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasCgemm3m" cublasCgemm3m) cublasStatus_t
   (handle :pointer)
   (transa cublasOperation_t)
@@ -3111,6 +3429,7 @@
   (beta :pointer)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasCgemm3mEx" cublasCgemm3mEx) cublasStatus_t
   (handle :pointer)
@@ -3131,6 +3450,7 @@
   (Ctype :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasZgemm_v2" cublasZgemm_v2) cublasStatus_t
   (handle :pointer)
   (transa cublasOperation_t)
@@ -3146,6 +3466,7 @@
   (beta :pointer)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasZgemm3m" cublasZgemm3m) cublasStatus_t
   (handle :pointer)
@@ -3163,6 +3484,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasHgemm" cublasHgemm) cublasStatus_t
   (handle :pointer)
   (transa cublasOperation_t)
@@ -3178,6 +3500,7 @@
   (beta :pointer)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasSgemmEx" cublasSgemmEx) cublasStatus_t
   (handle :pointer)
@@ -3197,6 +3520,7 @@
   (C :pointer)
   (Ctype :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasGemmEx" cublasGemmEx) cublasStatus_t
   (handle :pointer)
@@ -3219,6 +3543,7 @@
   (computeType :pointer)
   (algo cublasGemmAlgo_t))
 
+
 (cffi:defcfun ("cublasCgemmEx" cublasCgemmEx) cublasStatus_t
   (handle :pointer)
   (transa cublasOperation_t)
@@ -3237,6 +3562,7 @@
   (C :pointer)
   (Ctype :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasUint8gemmBias" cublasUint8gemmBias) cublasStatus_t
   (handle :pointer)
@@ -3258,6 +3584,7 @@
   (C_mult :int)
   (C_shift :int))
 
+
 (cffi:defcfun ("cublasSsyrk_v2" cublasSsyrk_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -3270,6 +3597,7 @@
   (beta :pointer)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasDsyrk_v2" cublasDsyrk_v2) cublasStatus_t
   (handle :pointer)
@@ -3284,6 +3612,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasCsyrk_v2" cublasCsyrk_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -3297,6 +3626,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasZsyrk_v2" cublasZsyrk_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -3309,6 +3639,7 @@
   (beta :pointer)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasCsyrkEx" cublasCsyrkEx) cublasStatus_t
   (handle :pointer)
@@ -3325,6 +3656,7 @@
   (Ctype :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasCsyrk3mEx" cublasCsyrk3mEx) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -3340,6 +3672,7 @@
   (Ctype :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasCherk_v2" cublasCherk_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -3353,6 +3686,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasZherk_v2" cublasZherk_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -3365,6 +3699,7 @@
   (beta :pointer)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasCherkEx" cublasCherkEx) cublasStatus_t
   (handle :pointer)
@@ -3381,6 +3716,7 @@
   (Ctype :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasCherk3mEx" cublasCherk3mEx) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -3395,6 +3731,7 @@
   (C :pointer)
   (Ctype :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasSsyr2k_v2" cublasSsyr2k_v2) cublasStatus_t
   (handle :pointer)
@@ -3411,6 +3748,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasDsyr2k_v2" cublasDsyr2k_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -3425,6 +3763,7 @@
   (beta :pointer)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasCsyr2k_v2" cublasCsyr2k_v2) cublasStatus_t
   (handle :pointer)
@@ -3441,6 +3780,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasZsyr2k_v2" cublasZsyr2k_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -3455,6 +3795,7 @@
   (beta :pointer)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasCher2k_v2" cublasCher2k_v2) cublasStatus_t
   (handle :pointer)
@@ -3471,6 +3812,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasZher2k_v2" cublasZher2k_v2) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -3485,6 +3827,7 @@
   (beta :pointer)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasSsyrkx" cublasSsyrkx) cublasStatus_t
   (handle :pointer)
@@ -3501,6 +3844,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasDsyrkx" cublasDsyrkx) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -3515,6 +3859,7 @@
   (beta :pointer)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasCsyrkx" cublasCsyrkx) cublasStatus_t
   (handle :pointer)
@@ -3531,6 +3876,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasZsyrkx" cublasZsyrkx) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -3545,6 +3891,7 @@
   (beta :pointer)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasCherkx" cublasCherkx) cublasStatus_t
   (handle :pointer)
@@ -3561,6 +3908,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasZherkx" cublasZherkx) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -3575,6 +3923,7 @@
   (beta :pointer)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasSsymm_v2" cublasSsymm_v2) cublasStatus_t
   (handle :pointer)
@@ -3591,6 +3940,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasDsymm_v2" cublasDsymm_v2) cublasStatus_t
   (handle :pointer)
   (side cublasSideMode_t)
@@ -3605,6 +3955,7 @@
   (beta :pointer)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasCsymm_v2" cublasCsymm_v2) cublasStatus_t
   (handle :pointer)
@@ -3621,6 +3972,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasZsymm_v2" cublasZsymm_v2) cublasStatus_t
   (handle :pointer)
   (side cublasSideMode_t)
@@ -3635,6 +3987,7 @@
   (beta :pointer)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasChemm_v2" cublasChemm_v2) cublasStatus_t
   (handle :pointer)
@@ -3651,6 +4004,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasZhemm_v2" cublasZhemm_v2) cublasStatus_t
   (handle :pointer)
   (side cublasSideMode_t)
@@ -3666,6 +4020,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasStrsm_v2" cublasStrsm_v2) cublasStatus_t
   (handle :pointer)
   (side cublasSideMode_t)
@@ -3679,6 +4034,7 @@
   (lda :int)
   (B :pointer)
   (ldb :int))
+
 
 (cffi:defcfun ("cublasDtrsm_v2" cublasDtrsm_v2) cublasStatus_t
   (handle :pointer)
@@ -3694,6 +4050,7 @@
   (B :pointer)
   (ldb :int))
 
+
 (cffi:defcfun ("cublasCtrsm_v2" cublasCtrsm_v2) cublasStatus_t
   (handle :pointer)
   (side cublasSideMode_t)
@@ -3708,6 +4065,7 @@
   (B :pointer)
   (ldb :int))
 
+
 (cffi:defcfun ("cublasZtrsm_v2" cublasZtrsm_v2) cublasStatus_t
   (handle :pointer)
   (side cublasSideMode_t)
@@ -3721,6 +4079,7 @@
   (lda :int)
   (B :pointer)
   (ldb :int))
+
 
 (cffi:defcfun ("cublasStrmm_v2" cublasStrmm_v2) cublasStatus_t
   (handle :pointer)
@@ -3738,6 +4097,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasDtrmm_v2" cublasDtrmm_v2) cublasStatus_t
   (handle :pointer)
   (side cublasSideMode_t)
@@ -3753,6 +4113,7 @@
   (ldb :int)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasCtrmm_v2" cublasCtrmm_v2) cublasStatus_t
   (handle :pointer)
@@ -3770,6 +4131,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasZtrmm_v2" cublasZtrmm_v2) cublasStatus_t
   (handle :pointer)
   (side cublasSideMode_t)
@@ -3785,6 +4147,7 @@
   (ldb :int)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasSgemmBatched" cublasSgemmBatched) cublasStatus_t
   (handle :pointer)
@@ -3803,6 +4166,7 @@
   (ldc :int)
   (batchCount :int))
 
+
 (cffi:defcfun ("cublasDgemmBatched" cublasDgemmBatched) cublasStatus_t
   (handle :pointer)
   (transa cublasOperation_t)
@@ -3819,6 +4183,7 @@
   (Carray :pointer)
   (ldc :int)
   (batchCount :int))
+
 
 (cffi:defcfun ("cublasCgemmBatched" cublasCgemmBatched) cublasStatus_t
   (handle :pointer)
@@ -3837,6 +4202,7 @@
   (ldc :int)
   (batchCount :int))
 
+
 (cffi:defcfun ("cublasCgemm3mBatched" cublasCgemm3mBatched) cublasStatus_t
   (handle :pointer)
   (transa cublasOperation_t)
@@ -3854,6 +4220,7 @@
   (ldc :int)
   (batchCount :int))
 
+
 (cffi:defcfun ("cublasZgemmBatched" cublasZgemmBatched) cublasStatus_t
   (handle :pointer)
   (transa cublasOperation_t)
@@ -3870,6 +4237,7 @@
   (Carray :pointer)
   (ldc :int)
   (batchCount :int))
+
 
 (cffi:defcfun ("cublasSgemmStridedBatched" cublasSgemmStridedBatched) cublasStatus_t
   (handle :pointer)
@@ -3891,6 +4259,7 @@
   (strideC :long-long)
   (batchCount :int))
 
+
 (cffi:defcfun ("cublasDgemmStridedBatched" cublasDgemmStridedBatched) cublasStatus_t
   (handle :pointer)
   (transa cublasOperation_t)
@@ -3910,6 +4279,7 @@
   (ldc :int)
   (strideC :long-long)
   (batchCount :int))
+
 
 (cffi:defcfun ("cublasCgemmStridedBatched" cublasCgemmStridedBatched) cublasStatus_t
   (handle :pointer)
@@ -3931,6 +4301,7 @@
   (strideC :long-long)
   (batchCount :int))
 
+
 (cffi:defcfun ("cublasCgemm3mStridedBatched" cublasCgemm3mStridedBatched) cublasStatus_t
   (handle :pointer)
   (transa cublasOperation_t)
@@ -3950,6 +4321,7 @@
   (ldc :int)
   (strideC :long-long)
   (batchCount :int))
+
 
 (cffi:defcfun ("cublasZgemmStridedBatched" cublasZgemmStridedBatched) cublasStatus_t
   (handle :pointer)
@@ -3971,6 +4343,7 @@
   (strideC :long-long)
   (batchCount :int))
 
+
 (cffi:defcfun ("cublasHgemmStridedBatched" cublasHgemmStridedBatched) cublasStatus_t
   (handle :pointer)
   (transa cublasOperation_t)
@@ -3991,6 +4364,7 @@
   (strideC :long-long)
   (batchCount :int))
 
+
 (cffi:defcfun ("cublasSgeam" cublasSgeam) cublasStatus_t
   (handle :pointer)
   (transa cublasOperation_t)
@@ -4005,6 +4379,7 @@
   (ldb :int)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasDgeam" cublasDgeam) cublasStatus_t
   (handle :pointer)
@@ -4021,6 +4396,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasCgeam" cublasCgeam) cublasStatus_t
   (handle :pointer)
   (transa cublasOperation_t)
@@ -4035,6 +4411,7 @@
   (ldb :int)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasZgeam" cublasZgeam) cublasStatus_t
   (handle :pointer)
@@ -4051,6 +4428,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasSgetrfBatched" cublasSgetrfBatched) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -4059,6 +4437,7 @@
   (P :pointer)
   (info :pointer)
   (batchSize :int))
+
 
 (cffi:defcfun ("cublasDgetrfBatched" cublasDgetrfBatched) cublasStatus_t
   (handle :pointer)
@@ -4069,6 +4448,7 @@
   (info :pointer)
   (batchSize :int))
 
+
 (cffi:defcfun ("cublasCgetrfBatched" cublasCgetrfBatched) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -4078,6 +4458,7 @@
   (info :pointer)
   (batchSize :int))
 
+
 (cffi:defcfun ("cublasZgetrfBatched" cublasZgetrfBatched) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -4086,6 +4467,7 @@
   (P :pointer)
   (info :pointer)
   (batchSize :int))
+
 
 (cffi:defcfun ("cublasSgetriBatched" cublasSgetriBatched) cublasStatus_t
   (handle :pointer)
@@ -4098,6 +4480,7 @@
   (info :pointer)
   (batchSize :int))
 
+
 (cffi:defcfun ("cublasDgetriBatched" cublasDgetriBatched) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -4108,6 +4491,7 @@
   (ldc :int)
   (info :pointer)
   (batchSize :int))
+
 
 (cffi:defcfun ("cublasCgetriBatched" cublasCgetriBatched) cublasStatus_t
   (handle :pointer)
@@ -4120,6 +4504,7 @@
   (info :pointer)
   (batchSize :int))
 
+
 (cffi:defcfun ("cublasZgetriBatched" cublasZgetriBatched) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -4130,6 +4515,7 @@
   (ldc :int)
   (info :pointer)
   (batchSize :int))
+
 
 (cffi:defcfun ("cublasSgetrsBatched" cublasSgetrsBatched) cublasStatus_t
   (handle :pointer)
@@ -4144,6 +4530,7 @@
   (info :pointer)
   (batchSize :int))
 
+
 (cffi:defcfun ("cublasDgetrsBatched" cublasDgetrsBatched) cublasStatus_t
   (handle :pointer)
   (trans cublasOperation_t)
@@ -4156,6 +4543,7 @@
   (ldb :int)
   (info :pointer)
   (batchSize :int))
+
 
 (cffi:defcfun ("cublasCgetrsBatched" cublasCgetrsBatched) cublasStatus_t
   (handle :pointer)
@@ -4170,6 +4558,7 @@
   (info :pointer)
   (batchSize :int))
 
+
 (cffi:defcfun ("cublasZgetrsBatched" cublasZgetrsBatched) cublasStatus_t
   (handle :pointer)
   (trans cublasOperation_t)
@@ -4182,6 +4571,7 @@
   (ldb :int)
   (info :pointer)
   (batchSize :int))
+
 
 (cffi:defcfun ("cublasStrsmBatched" cublasStrsmBatched) cublasStatus_t
   (handle :pointer)
@@ -4198,6 +4588,7 @@
   (ldb :int)
   (batchCount :int))
 
+
 (cffi:defcfun ("cublasDtrsmBatched" cublasDtrsmBatched) cublasStatus_t
   (handle :pointer)
   (side cublasSideMode_t)
@@ -4212,6 +4603,7 @@
   (B :pointer)
   (ldb :int)
   (batchCount :int))
+
 
 (cffi:defcfun ("cublasCtrsmBatched" cublasCtrsmBatched) cublasStatus_t
   (handle :pointer)
@@ -4228,6 +4620,7 @@
   (ldb :int)
   (batchCount :int))
 
+
 (cffi:defcfun ("cublasZtrsmBatched" cublasZtrsmBatched) cublasStatus_t
   (handle :pointer)
   (side cublasSideMode_t)
@@ -4243,6 +4636,7 @@
   (ldb :int)
   (batchCount :int))
 
+
 (cffi:defcfun ("cublasSmatinvBatched" cublasSmatinvBatched) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -4252,6 +4646,7 @@
   (lda_inv :int)
   (info :pointer)
   (batchSize :int))
+
 
 (cffi:defcfun ("cublasDmatinvBatched" cublasDmatinvBatched) cublasStatus_t
   (handle :pointer)
@@ -4263,6 +4658,7 @@
   (info :pointer)
   (batchSize :int))
 
+
 (cffi:defcfun ("cublasCmatinvBatched" cublasCmatinvBatched) cublasStatus_t
   (handle :pointer)
   (n :int)
@@ -4272,6 +4668,7 @@
   (lda_inv :int)
   (info :pointer)
   (batchSize :int))
+
 
 (cffi:defcfun ("cublasZmatinvBatched" cublasZmatinvBatched) cublasStatus_t
   (handle :pointer)
@@ -4283,6 +4680,7 @@
   (info :pointer)
   (batchSize :int))
 
+
 (cffi:defcfun ("cublasSgeqrfBatched" cublasSgeqrfBatched) cublasStatus_t
   (handle :pointer)
   (m :int)
@@ -4292,6 +4690,7 @@
   (TauArray :pointer)
   (info :pointer)
   (batchSize :int))
+
 
 (cffi:defcfun ("cublasDgeqrfBatched" cublasDgeqrfBatched) cublasStatus_t
   (handle :pointer)
@@ -4303,6 +4702,7 @@
   (info :pointer)
   (batchSize :int))
 
+
 (cffi:defcfun ("cublasCgeqrfBatched" cublasCgeqrfBatched) cublasStatus_t
   (handle :pointer)
   (m :int)
@@ -4313,6 +4713,7 @@
   (info :pointer)
   (batchSize :int))
 
+
 (cffi:defcfun ("cublasZgeqrfBatched" cublasZgeqrfBatched) cublasStatus_t
   (handle :pointer)
   (m :int)
@@ -4322,6 +4723,7 @@
   (TauArray :pointer)
   (info :pointer)
   (batchSize :int))
+
 
 (cffi:defcfun ("cublasSgelsBatched" cublasSgelsBatched) cublasStatus_t
   (handle :pointer)
@@ -4337,6 +4739,7 @@
   (devInfoArray :pointer)
   (batchSize :int))
 
+
 (cffi:defcfun ("cublasDgelsBatched" cublasDgelsBatched) cublasStatus_t
   (handle :pointer)
   (trans cublasOperation_t)
@@ -4350,6 +4753,7 @@
   (info :pointer)
   (devInfoArray :pointer)
   (batchSize :int))
+
 
 (cffi:defcfun ("cublasCgelsBatched" cublasCgelsBatched) cublasStatus_t
   (handle :pointer)
@@ -4365,6 +4769,7 @@
   (devInfoArray :pointer)
   (batchSize :int))
 
+
 (cffi:defcfun ("cublasZgelsBatched" cublasZgelsBatched) cublasStatus_t
   (handle :pointer)
   (trans cublasOperation_t)
@@ -4379,6 +4784,7 @@
   (devInfoArray :pointer)
   (batchSize :int))
 
+
 (cffi:defcfun ("cublasSdgmm" cublasSdgmm) cublasStatus_t
   (handle :pointer)
   (mode cublasSideMode_t)
@@ -4390,6 +4796,7 @@
   (incx :int)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasDdgmm" cublasDdgmm) cublasStatus_t
   (handle :pointer)
@@ -4403,6 +4810,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasCdgmm" cublasCdgmm) cublasStatus_t
   (handle :pointer)
   (mode cublasSideMode_t)
@@ -4414,6 +4822,7 @@
   (incx :int)
   (C :pointer)
   (ldc :int))
+
 
 (cffi:defcfun ("cublasZdgmm" cublasZdgmm) cublasStatus_t
   (handle :pointer)
@@ -4427,6 +4836,7 @@
   (C :pointer)
   (ldc :int))
 
+
 (cffi:defcfun ("cublasStpttr" cublasStpttr) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -4434,6 +4844,7 @@
   (AP :pointer)
   (A :pointer)
   (lda :int))
+
 
 (cffi:defcfun ("cublasDtpttr" cublasDtpttr) cublasStatus_t
   (handle :pointer)
@@ -4443,6 +4854,7 @@
   (A :pointer)
   (lda :int))
 
+
 (cffi:defcfun ("cublasCtpttr" cublasCtpttr) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -4450,6 +4862,7 @@
   (AP :pointer)
   (A :pointer)
   (lda :int))
+
 
 (cffi:defcfun ("cublasZtpttr" cublasZtpttr) cublasStatus_t
   (handle :pointer)
@@ -4459,6 +4872,7 @@
   (A :pointer)
   (lda :int))
 
+
 (cffi:defcfun ("cublasStrttp" cublasStrttp) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -4466,6 +4880,7 @@
   (A :pointer)
   (lda :int)
   (AP :pointer))
+
 
 (cffi:defcfun ("cublasDtrttp" cublasDtrttp) cublasStatus_t
   (handle :pointer)
@@ -4475,6 +4890,7 @@
   (lda :int)
   (AP :pointer))
 
+
 (cffi:defcfun ("cublasCtrttp" cublasCtrttp) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -4483,6 +4899,7 @@
   (lda :int)
   (AP :pointer))
 
+
 (cffi:defcfun ("cublasZtrttp" cublasZtrttp) cublasStatus_t
   (handle :pointer)
   (uplo cublasFillMode_t)
@@ -4490,3 +4907,4 @@
   (A :pointer)
   (lda :int)
   (AP :pointer))
+

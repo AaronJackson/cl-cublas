@@ -1,11 +1,5 @@
-(ql:quickload :cl-cublas)
-
+(asdf:load-system :cl-cublas)
 (in-package #:cl-cublas)
-
-(cffi:define-foreign-library cublas
-    (t (:default "libcublas")))
-(cffi:use-foreign-library cublas)
-
 
 (defparameter *cublas* (cffi:foreign-alloc :pointer))
 (defparameter *cpuA* (cffi:foreign-alloc
