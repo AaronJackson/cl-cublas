@@ -1,6 +1,7 @@
-(ql:quickload :cl-cublas)
+(push '*default-pathname-defaults* asdf:*central-registry*)
+(asdf:load-system :cl-cublas)
 
-(in-package #:cl-cublas)
+(in-package :cl-cublas)
 
 (cffi:define-foreign-library cublas
     (t (:default "libcublas")))
@@ -20,7 +21,7 @@
     :accessor ptr-gpu
     :initform nil)))
 
-(defmethod set-matrix ((m matrix) data)
+(defmethod set-data ((m matrix) data)
   "set data of matrix"
   (setf (slot-value m 'ptr-c)
 	(cffi:foreign-alloc
@@ -28,7 +29,7 @@
 	 :initial-contents data))
   m)
 
-(defmethod push-matrix ((m matrix))
+(defmethod gpu ((m matrix))
   "push c data to cuda data"
   (if (not (ptr-gpu m))
       (progn (setf (ptr-gpu m)
@@ -42,7 +43,7 @@
 		   (cffi:mem-ref (ptr-gpu m) ':pointer) (cols m))
   m)
 
-(defmethod pull-matrix ((m matrix))
+(defmethod cpu ((m matrix))
   "pull cuda data to c data"
   (cublasGetMatrix (rows m) (cols m)
 		   (cffi:foreign-type-size ':float)
@@ -50,45 +51,36 @@
 		   (rows m) (ptr-c m) (cols m))
   m)
 
-(defmethod print-matrix ((m matrix))
+(defmethod print-object ((m matrix) stream)
   "prints a matrix, uh, as a list for now"
-  (print (loop for i from 0 below (* (rows m) (cols m))
-	    collect (cffi:mem-aref (ptr-c m) :float i)))
+  (format stream "~$" (loop for i from 0 below (* (rows m) (cols m))
+		    collect (cffi:mem-aref (ptr-c m) :float i)))
   m)
 
 ;; The dimensions may be wrong, haven't really thought about them much
 ;; since I'm only trying a 3x3 matrix at the moment.
-(defmethod multiply-matrix ((A matrix) (B matrix))
+(defmethod multiply ((A matrix) (B matrix))
   "A"
   (let ((Z (make-instance 'matrix :rows (rows A) :cols (cols B))))
-    (set-matrix Z (make-array (* (rows A) (cols A))
+    (set-data Z (make-array (* (rows A) (cols A))
 			      :initial-element 0.0))
-    (push-matrix Z)
+    (gpu Z)
     (cublasSgemm 78 78 (cols A) (rows B) (rows A) 1.0
 		 (cffi:mem-ref (ptr-gpu A) ':pointer) (rows A)
 		 (cffi:mem-ref (ptr-gpu B) ':pointer) (rows A) 1.0
 		 (cffi:mem-ref (ptr-gpu Z) ':pointer) (cols A))
     Z))
 
-
-(defparameter *cublas* (cffi:foreign-alloc :pointer))
-(cublasCreate_v2 *cublas*)
-
 (defvar A (make-instance 'matrix :rows 3 :cols 3))
 (defvar B (make-instance 'matrix :rows 3 :cols 3))
 
-(set-matrix A #(1.0 2.0 3.0
-		4.0 5.0 6.0
-		7.0 8.0 9.0))
-(set-matrix B #(1.0 2.0 1.0
-		2.0 1.0 2.0
-		1.0 2.0 1.0))
-
-(push-matrix A)
-(push-matrix B)
+(gpu (set-data A #(1.0 2.0 3.0
+		   4.0 5.0 6.0
+		   7.0 8.0 9.0)))
+(gpu (set-data B #(1.0 2.0 1.0
+		   2.0 1.0 2.0
+		   1.0 2.0 1.0)))
 
 ;; Hmm output is transposed. Might need to switch to column first
 ;; indexing.
-(defvar C (multiply-matrix A B))
-(pull-matrix C)
-(print-matrix C)
+(print (cpu (multiply (gpu A) (gpu B))))
