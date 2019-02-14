@@ -3,10 +3,6 @@
 
 (in-package :cl-cublas)
 
-(cffi:define-foreign-library cublas
-    (t (:default "libcublas")))
-(cffi:use-foreign-library cublas)
-
 (defclass matrix ()
   ((rows
     :initarg :rows
@@ -20,7 +16,10 @@
    (ptr-gpu
     :accessor ptr-gpu
     :initform nil)
-   (current-ptr ;; specifies whether the latest copy is on cpu or gpu
+   (current-ptr
+    ;; Specifies whether the "most up-to-date" copy of data is in host
+    ;; or device memory. It should be set to either 'cpu or 'gpu, and
+    ;; this should be automatic.
     :accessor current-ptr
     :initform 'cpu)))
 
@@ -31,8 +30,8 @@
 		     :initial-element 0.0))
   (dotimes (r (rows m))
     (dotimes (c (cols m))
-      (setf (cffi:mem-aref (ptr-cpu m) :float (+ (* (cols m) r) c))
-	    (aref data (+ (* (rows m) c) r)))))
+      (setf (cffi:mem-aref (ptr-cpu m) :float (+ (* (rows m) c) r))
+	    (aref data (+ (* (cols m) r) c)))))
   (setf (current-ptr m) 'cpu)
   m)
 
@@ -48,7 +47,8 @@
 	     (cublasSetMatrix (rows m) (cols m)
 			      (cffi:foreign-type-size ':float)
 			      (ptr-cpu m) (rows m)
-			      (cffi:mem-ref (ptr-gpu m) ':pointer) (cols m))))
+			      (cffi:mem-ref (ptr-gpu m) ':pointer)
+			      (cols m))))
   (setf (current-ptr m) 'gpu)
   m)
 
@@ -65,42 +65,84 @@
 (defmethod print-object ((m matrix) stream)
   "prints a matrix, uh, as a list for now"
   (cpu m)
-  (dotimes (c (cols m))
-       (dotimes (r (rows m))
-	 (format stream "~$ " (cffi:mem-aref (ptr-cpu m) :float
-					     (+ (* (cols m) r) c))))
-       (format stream "~%"))
+  (dotimes (r (rows m))
+    (dotimes (c (cols m))
+      (format stream "~2,1,6$ " (cffi:mem-aref (ptr-cpu m) :float
+					  (+ (* (rows m) c) r))))
+    (format stream "~%"))
   m)
 
-;; The dimensions may be wrong, haven't really thought about them much
-;; since I'm only trying a 3x3 matrix at the moment.
-(defmethod multiply ((A matrix) (B matrix))
-  "A"
-  (let ((Z (make-instance 'matrix :rows (rows A) :cols (cols B))))
-    (set-data Z (make-array (* (rows A) (cols A))
-			    :element-type ':float
-			    :initial-element 0.0))
-    (cublasSgemm 78 78 (cols A) (rows B) (rows A) 1.0
-		 (cffi:mem-ref (ptr-gpu (gpu A)) ':pointer) (rows A)
-		 (cffi:mem-ref (ptr-gpu (gpu B)) ':pointer) (rows A) 1.0
-		 (cffi:mem-ref (ptr-gpu (gpu Z)) ':pointer) (cols A))
+(defmethod zeros (r c)
+  (let ((Z (make-instance 'matrix :rows r :cols c)))
+    (set-data Z (make-array (* r c) :initial-element 0.0))
     Z))
 
-(defvar A (make-instance 'matrix :rows 3 :cols 3))
-(defvar B (make-instance 'matrix :rows 3 :cols 3))
 
-(set-data A #(1.0 2.0 3.0
-	      4.0 5.0 6.0
-	      7.0 8.0 9.0))
-(set-data B #(1.0 2.0 1.0
-	      2.0 1.0 2.0
-	      1.0 2.0 1.0))
+(defmethod ones (r c)
+  (let ((Z (make-instance 'matrix :rows r :cols c)))
+    (set-data Z (make-array (* r c) :initial-element 1.0))
+    Z))
+
+(defmethod eye (r)
+  "Returns the identity matrix of size r x r"
+  (let ((Z (make-instance 'matrix :rows r :cols r)))
+    (setf (ptr-cpu Z) (cffi:foreign-alloc :float
+					  :count (* r r)
+					  :initial-element 0.0))
+    (dotimes (i r)
+      (setf (cffi:mem-aref (ptr-cpu Z) :float (+ (* r i) i)) 1.0))
+  Z))
+
+(defmethod multiply-to ((A matrix) (B matrix) (Z matrix))
+  "Multiply matrices A and B, storing result in Z (returned)"
+  (assert (= (cols A) (rows B)))
+  (let ((m (rows A)) (n (cols B)) (k (cols A)) (alpha 1.0) (beta 0.0))
+    (cublasSgemm 78 78 m n k alpha
+		 (cffi:mem-ref (ptr-gpu (gpu A)) ':pointer) m
+		 (cffi:mem-ref (ptr-gpu (gpu B)) ':pointer) k beta
+		 (cffi:mem-ref (ptr-gpu (gpu Z)) ':pointer) m))
+  Z)
+
+(defmethod multiply ((A matrix) (B matrix))
+  "Multiply matrices A and B, preallocating returned Z"
+  (assert (= (cols A) (rows B)))
+  (let ((Z (zeros (rows A) (cols B))))
+    (multiply-to A B Z)
+    Z))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Testing stuff:
+
+(defvar A (ones 3 4))
+(defvar B (zeros 4 3))
+(defvar Z (zeros 3 3))
+
+(set-data B #(1.0 0.0 0.0
+	      0.0 1.0 0.0
+	      0.0 0.0 1.0
+	      0.0 0.0 0.0))
 
 (print A)
-(print (multiply A B))
+(print B)
+(multiply-to A B Z)
+(print Z)
 
-;; Should print
-;;      8    10     8
-;;     20    25    20
-;;     32    40    32
+;; (defvar AA (zeros 4 4))
+;; (defvar BB (zeros 4 4))
+;; (defvar ZZ  (zeros 4 4))
 
+;; (set-data AA #(1.0 2.0 3.0 1.0
+;; 	       4.0 5.0 6.0 1.0
+;; 	       7.0 8.0 9.0 1.0
+;; 	       1.0 1.0 1.0 1.0))
+;; (set-data BB #(1.0 2.0 1.0 2.0
+;; 	       2.0 1.0 2.0 1.0
+;; 	       1.0 2.0 1.0 2.0
+;; 	       2.0 1.0 2.0 1.0))
+
+;; (print AA)
+;; (print BB)
+;; (print (multiply AA BB))
+;; (dotimes (c 10)
+;;   (multiply-to AA BB ZZ))
