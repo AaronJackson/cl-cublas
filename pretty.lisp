@@ -70,6 +70,8 @@
       (format stream "~2,1,6$ " (cffi:mem-aref (ptr-cpu m) :float
 					  (+ (* (rows m) c) r))))
     (format stream "~%"))
+  (format stream "~$" (loop for i from 0 below (* (rows m) (cols m))
+			 collect (cffi:mem-aref (ptr-cpu m) :float i)))
   m)
 
 (defmethod zeros (r c)
@@ -93,10 +95,15 @@
       (setf (cffi:mem-aref (ptr-cpu Z) :float (+ (* r i) i)) 1.0))
   Z))
 
+
 (defmethod multiply-to ((A matrix) (B matrix) (Z matrix))
   "Multiply matrices A and B, storing result in Z (returned)"
+  ;; Ensure that the inner dimensions of A and B match.
   (assert (= (cols A) (rows B)))
+  ;; Ensure that the outer dimensions of A and B match the size of Z.
+  (assert (and (= (rows A) (rows Z)) (= (cols B) (cols Z))))
   (let ((m (rows A)) (n (cols B)) (k (cols A)) (alpha 1.0) (beta 0.0))
+    ;; 78 is ASCII N, i.e. no transpose.
     (cublasSgemm 78 78 m n k alpha
 		 (cffi:mem-ref (ptr-gpu (gpu A)) ':pointer) m
 		 (cffi:mem-ref (ptr-gpu (gpu B)) ':pointer) k beta
@@ -110,23 +117,22 @@
     (multiply-to A B Z)
     Z))
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Testing stuff:
 
-(defvar A (ones 3 4))
-(defvar B (zeros 4 3))
-(defvar Z (zeros 3 3))
+(defparameter A (ones 2 16))
+(defparameter B (ones 16 2))
+;; (defparameter Z (zeros 16 2))
 
-(set-data B #(1.0 0.0 0.0
-	      0.0 1.0 0.0
-	      0.0 0.0 1.0
-	      0.0 0.0 0.0))
+;; (set-data B #(1.0 0.0 0.0
+;; 	      0.0 1.0 0.0
+;; 	      0.0 0.0 1.0
+;; 	      0.0 0.0 0.0))
 
-(print A)
-(print B)
-(multiply-to A B Z)
-(print Z)
+(print (multiply A B))
+;;(print (multiply (ones 2 1) (ones 1 2)))
+
+;;(print (multiply (ones 4 4) (eye 4)))
 
 ;; (defvar AA (zeros 4 4))
 ;; (defvar BB (zeros 4 4))
