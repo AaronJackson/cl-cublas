@@ -70,8 +70,6 @@
       (format stream "~2,1,6$ " (cffi:mem-aref (ptr-cpu m) :float
 					  (+ (* (rows m) c) r))))
     (format stream "~%"))
-  (format stream "~$" (loop for i from 0 below (* (rows m) (cols m))
-			 collect (cffi:mem-aref (ptr-cpu m) :float i)))
   m)
 
 (defmethod zeros (r c)
