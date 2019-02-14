@@ -44,21 +44,23 @@
 			(cublasAlloc (* (rows m) (cols m))
 				     (cffi:foreign-type-size ':float)
 				     (ptr-gpu m))))
-	     (cublasSetMatrix (rows m) (cols m)
-			      (cffi:foreign-type-size ':float)
-			      (ptr-cpu m) (rows m)
-			      (cffi:mem-ref (ptr-gpu m) ':pointer)
-			      (cols m))))
+	     (assert (eq :CUBLAS_STATUS_SUCCESS
+			 (cublasSetMatrix (rows m) (cols m)
+					  (cffi:foreign-type-size ':float)
+					  (ptr-cpu m) (rows m)
+					  (cffi:mem-ref (ptr-gpu m) ':pointer)
+					  (rows m)))))
   (setf (current-ptr m) 'gpu)
   m)
 
 (defmethod cpu ((m matrix))
   "pull cuda data to c data"
   (if (eq (current-ptr m) 'gpu)
-      (cublasGetMatrix (rows m) (cols m)
-		       (cffi:foreign-type-size ':float)
-		       (cffi:mem-ref (ptr-gpu m) ':pointer)
-		       (rows m) (ptr-cpu m) (cols m)))
+      (assert (eq :CUBLAS_STATUS_SUCCESS
+		  (cublasGetMatrix (rows m) (cols m)
+				   (cffi:foreign-type-size ':float)
+				   (cffi:mem-ref (ptr-gpu m) ':pointer)
+				   (rows m) (ptr-cpu m) (rows m)))))
   (setf (current-ptr m) 'cpu)
   m)
 
@@ -77,7 +79,6 @@
     (set-data Z (make-array (* r c) :initial-element 0.0))
     Z))
 
-
 (defmethod ones (r c)
   (let ((Z (make-instance 'matrix :rows r :cols c)))
     (set-data Z (make-array (* r c) :initial-element 1.0))
@@ -92,7 +93,6 @@
     (dotimes (i r)
       (setf (cffi:mem-aref (ptr-cpu Z) :float (+ (* r i) i)) 1.0))
   Z))
-
 
 (defmethod multiply-to ((A matrix) (B matrix) (Z matrix))
   "Multiply matrices A and B, storing result in Z (returned)"
@@ -118,35 +118,4 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Testing stuff:
 
-(defparameter A (ones 2 16))
-(defparameter B (ones 16 2))
-;; (defparameter Z (zeros 16 2))
-
-;; (set-data B #(1.0 0.0 0.0
-;; 	      0.0 1.0 0.0
-;; 	      0.0 0.0 1.0
-;; 	      0.0 0.0 0.0))
-
-(print (multiply A B))
-;;(print (multiply (ones 2 1) (ones 1 2)))
-
-;;(print (multiply (ones 4 4) (eye 4)))
-
-;; (defvar AA (zeros 4 4))
-;; (defvar BB (zeros 4 4))
-;; (defvar ZZ  (zeros 4 4))
-
-;; (set-data AA #(1.0 2.0 3.0 1.0
-;; 	       4.0 5.0 6.0 1.0
-;; 	       7.0 8.0 9.0 1.0
-;; 	       1.0 1.0 1.0 1.0))
-;; (set-data BB #(1.0 2.0 1.0 2.0
-;; 	       2.0 1.0 2.0 1.0
-;; 	       1.0 2.0 1.0 2.0
-;; 	       2.0 1.0 2.0 1.0))
-
-;; (print AA)
-;; (print BB)
-;; (print (multiply AA BB))
-;; (dotimes (c 10)
-;;   (multiply-to AA BB ZZ))
+(print (multiply (ones 68 16) (ones 16 68)))
