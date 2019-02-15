@@ -34,9 +34,7 @@
 				  (cublasFree p)))))
 
 (defun matrix (rows cols)
-  (let ((m (make-instance '<matrix> :rows rows :cols cols)))
-    ;; nothing
-    m))
+  (make-instance '<matrix> :rows rows :cols cols))
 
 (defmethod set-data ((m <matrix>) data)
   "set data of matrix"
@@ -44,12 +42,11 @@
 		     :float :count (* (rows m) (cols m))
 		     :initial-element 0.0))
   (attach-cpu-finalizer m)
-  (dotimes (r (rows m))
+  (setf (current-ptr m) 'cpu)
+  (dotimes (r (rows m) m)
     (dotimes (c (cols m))
       (setf (cffi:mem-aref (ptr-cpu m) :float (+ (* (rows m) c) r))
 	    (aref data (+ (* (cols m) r) c)))))
-  (setf (current-ptr m) 'cpu)
-  m)
 
 (defmethod gpu ((m <matrix>))
   "push c data to cuda data"
@@ -60,53 +57,49 @@
 			(cublasAlloc (* (rows m) (cols m))
 				     (cffi:foreign-type-size ':float)
 				     (ptr-gpu m))
-			(attach-gpu-finalizer m)))
+			(attach-gpu-finalizer m)
+			(setf (current-ptr m) 'gpu)))
 	     (assert (eq :CUBLAS_STATUS_SUCCESS
 			 (cublasSetMatrix (rows m) (cols m)
 					  (cffi:foreign-type-size ':float)
 					  (ptr-cpu m) (rows m)
 					  (cffi:mem-ref (ptr-gpu m) ':pointer)
 					  (rows m))))))
-  (setf (current-ptr m) 'gpu)
   m)
 
 (defmethod cpu ((m <matrix>))
   "pull cuda data to c data"
   (if (eq (current-ptr m) 'gpu)
+      (setf (current-ptr m) 'cpu)
       (assert (eq :CUBLAS_STATUS_SUCCESS
 		  (cublasGetMatrix (rows m) (cols m)
 				   (cffi:foreign-type-size ':float)
 				   (cffi:mem-ref (ptr-gpu m) ':pointer)
 				   (rows m) (ptr-cpu m) (rows m)))))
-  (setf (current-ptr m) 'cpu)
   m)
 
 (defmethod print-object ((m <matrix>) stream)
   "prints a matrix, uh, as a list for now"
   (cpu m)
-  (dotimes (r (rows m))
+  (dotimes (r (rows m) m)
     (dotimes (c (cols m))
       (format stream "~2,1,6$ " (cffi:mem-aref (ptr-cpu m) :float
 					  (+ (* (rows m) c) r))))
-    (format stream "~%"))
-  m)
+    (format stream "~%")))
 
 (defmethod zeros (r c)
   (let ((Z (matrix r c)))
-    (set-data Z (make-array (* r c) :initial-element 0.0))
-    Z))
+    (set-data Z (make-array (* r c) :initial-element 0.0))))
 
 (defmethod ones (r c)
   (let ((Z (matrix r c)))
-    (set-data Z (make-array (* r c) :initial-element 1.0))
-    Z))
+    (set-data Z (make-array (* r c) :initial-element 1.0))))
 
 (defmethod eye (r)
   "Returns the identity matrix of size r x r"
   (let ((Z (zeros r r)))
-    (dotimes (i r)
-      (setf (cffi:mem-aref (ptr-cpu Z) :float (+ (* r i) i)) 1.0))
-  Z))
+    (dotimes (i r Z)
+      (setf (cffi:mem-aref (ptr-cpu Z) :float (+ (* r i) i)) 1.0))))
 
 (defmethod multiply-to ((A <matrix>) (B <matrix>) (Z <matrix>))
   "Multiply matrices A and B, storing result in Z (returned)"
@@ -126,14 +119,26 @@
   "Multiply matrices A and B, preallocating returned Z"
   (assert (= (cols A) (rows B)))
   (let ((Z (zeros (rows A) (cols B))))
-    (multiply-to A B Z)
-    Z))
+    (multiply-to A B Z)))
+
+(defmethod add ((A <matrix>) (B <matrix>))
+  "Computes the sum of two matrices of the same size"
+  (assert (and (= (rows A) (rows B)) (= (cols A) (cols B))))
+  (let ((Z (zeros (rows A) (cols A))))
+    (dotimes (r (rows A) Z)
+      (dotimes (c (cols A))
+	(setf (cffi:mem-aref (ptr-cpu (cpu Z)) :float (+ (* (rows Z) c) r))
+	      (+ (cffi:mem-aref (ptr-cpu (cpu A)) :float (+ (* (rows A) c) r))
+		 (cffi:mem-aref (ptr-cpu (cpu B)) :float (+ (* (rows B) c) r))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Testing stuff:
 
-;; (let ((a (ones 256 256))
-;;       (b (ones 256 256)))
-;;   (dotimes (i 100000)
-;;     (multiply a b)))
+(let ((a (ones 2 2))
+      (b (eye 2))
+      (z (zeros 2 2)))
+  (dotimes (i 1000)
+    (multiply-to a b z))
+  (print z))
 
+(print (add (ones 2 2) (ones 2 2)))
