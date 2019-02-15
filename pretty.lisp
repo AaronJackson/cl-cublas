@@ -81,13 +81,6 @@
   (setf (current-ptr m) 'cpu)
   m)
 
-(defmethod cleanup ((m <matrix>))
-  (cublasFree (ptr-gpu m))
-  (cffi:foreign-free (ptr-cpu m))
-  (setf (rows m) 0
-	(cols m) 0)
-  nil)
-
 (defmethod print-object ((m <matrix>) stream)
   "prints a matrix, uh, as a list for now"
   (cpu m)
