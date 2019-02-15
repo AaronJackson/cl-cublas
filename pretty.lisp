@@ -46,7 +46,7 @@
   (dotimes (r (rows m) m)
     (dotimes (c (cols m))
       (setf (cffi:mem-aref (ptr-cpu m) :float (+ (* (rows m) c) r))
-	    (aref data (+ (* (cols m) r) c)))))
+	    (aref data (+ (* (cols m) r) c))))))
 
 (defmethod gpu ((m <matrix>))
   "push c data to cuda data"
@@ -70,12 +70,12 @@
 (defmethod cpu ((m <matrix>))
   "pull cuda data to c data"
   (if (eq (current-ptr m) 'gpu)
-      (setf (current-ptr m) 'cpu)
       (assert (eq :CUBLAS_STATUS_SUCCESS
 		  (cublasGetMatrix (rows m) (cols m)
 				   (cffi:foreign-type-size ':float)
 				   (cffi:mem-ref (ptr-gpu m) ':pointer)
 				   (rows m) (ptr-cpu m) (rows m)))))
+  (setf (current-ptr m) 'cpu)
   m)
 
 (defmethod print-object ((m <matrix>) stream)
@@ -131,14 +131,29 @@
 	      (+ (cffi:mem-aref (ptr-cpu (cpu A)) :float (+ (* (rows A) c) r))
 		 (cffi:mem-aref (ptr-cpu (cpu B)) :float (+ (* (rows B) c) r))))))))
 
+(defmethod rand (r c)
+  "Generate uniform random matrix"
+  (let ((Z (zeros r c)))
+    (dotimes (i (* r c) Z)
+      (setf (cffi:mem-aref (ptr-cpu (cpu Z)) :float i) (random 1.0)))))
+
+(defmethod randn (r c)
+  "Generate (CLT) normal random matrix using "
+  (let ((Z (zeros r c)))
+    (dotimes (i (* r c) Z)
+      (setf (cffi:mem-aref (ptr-cpu (cpu Z)) :float i)
+	    (- (reduce '+ (loop for ii from 1 to 12 collect (random 1.0))) 6)))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Testing stuff:
 
-(let ((a (ones 2 2))
-      (b (eye 2))
-      (z (zeros 2 2)))
-  (dotimes (i 1000)
-    (multiply-to a b z))
-  (print z))
+;; (let ((a (ones 2 2))
+;;       (b (eye 2))
+;;       (z (zeros 2 2)))
+;;   (dotimes (i 1000)
+;;     (multiply-to a b z))
+;;   (print z))
 
-(print (add (ones 2 2) (ones 2 2)))
+(print (randn 5 5))
+
+;(print (add (ones 2 2) (ones 2 2)))
