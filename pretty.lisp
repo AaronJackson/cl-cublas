@@ -49,7 +49,7 @@
 					  (cffi:foreign-type-size ':float)
 					  (ptr-cpu m) (rows m)
 					  (cffi:mem-ref (ptr-gpu m) ':pointer)
-					  (rows m)))))
+					  (rows m))))))
   (setf (current-ptr m) 'gpu)
   m)
 
@@ -63,6 +63,14 @@
 				   (rows m) (ptr-cpu m) (rows m)))))
   (setf (current-ptr m) 'cpu)
   m)
+
+(defmethod cleanup ((m matrix))
+  (cublasFree (ptr-gpu m))
+  (cffi:foreign-free (ptr-cpu m))
+  (setf (rows m) 0
+	(cols m) 0)
+  nil)
+
 
 (defmethod print-object ((m matrix) stream)
   "prints a matrix, uh, as a list for now"
@@ -118,4 +126,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Testing stuff:
 
-(print (multiply (ones 68 16) (ones 16 68)))
+(let ((a (ones 1024 10000))
+      (b (ones 10000 1024))
+      (z (zeros 1024 1024)))
+  (dotimes (i 1)
+    (multiply-to a b z))
+  (cleanup a)
+  (cleanup b)
+  (cleanup z))
