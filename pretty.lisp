@@ -23,9 +23,19 @@
     :accessor current-ptr
     :initform 'cpu)))
 
+(defun attach-cpu-finalizer (m)
+  (let ((p (ptr-cpu m)))
+    (trivial-garbage:finalize m (lambda ()
+				  (cffi:foreign-free p)))))
+
+(defun attach-gpu-finalizer (m)
+  (let ((p (ptr-gpu m)))
+    (trivial-garbage:finalize m (lambda ()
+				  (cublasFree p)))))
+
 (defun matrix (rows cols)
   (let ((m (make-instance '<matrix> :rows rows :cols cols)))
-    ;; future gc stuff
+    ;; nothing
     m))
 
 (defmethod set-data ((m <matrix>) data)
@@ -33,6 +43,7 @@
   (setf (ptr-cpu m) (cffi:foreign-alloc
 		     :float :count (* (rows m) (cols m))
 		     :initial-element 0.0))
+  (attach-cpu-finalizer m)
   (dotimes (r (rows m))
     (dotimes (c (cols m))
       (setf (cffi:mem-aref (ptr-cpu m) :float (+ (* (rows m) c) r))
@@ -48,7 +59,8 @@
 			      (cffi:foreign-alloc :pointer))
 			(cublasAlloc (* (rows m) (cols m))
 				     (cffi:foreign-type-size ':float)
-				     (ptr-gpu m))))
+				     (ptr-gpu m))
+			(attach-gpu-finalizer m)))
 	     (assert (eq :CUBLAS_STATUS_SUCCESS
 			 (cublasSetMatrix (rows m) (cols m)
 					  (cffi:foreign-type-size ':float)
@@ -130,13 +142,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Testing stuff:
 
-(let ((a (ones 128 128))
-      (b (ones 128 128))
-      (z (zeros 128 128)))
-  (dotimes (i 100)
-    (multiply-to a b z))
-  (print z)
-  (cleanup a)
-  (cleanup b)
-  (cleanup z))
+;; (let ((a (ones 256 256))
+;;       (b (ones 256 256)))
+;;   (dotimes (i 100000)
+;;     (multiply a b)))
 
