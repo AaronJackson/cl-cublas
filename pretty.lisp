@@ -110,10 +110,7 @@
 
 (defmethod eye (r)
   "Returns the identity matrix of size r x r"
-  (let ((Z (matrix r r)))
-    (setf (ptr-cpu Z) (cffi:foreign-alloc :float
-					  :count (* r r)
-					  :initial-element 0.0))
+  (let ((Z (zeros r r)))
     (dotimes (i r)
       (setf (cffi:mem-aref (ptr-cpu Z) :float (+ (* r i) i)) 1.0))
   Z))
