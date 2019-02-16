@@ -1,3 +1,29 @@
-* Playing about with cuBLAS in Common Lisp
+* cl-cublas
 
-Don't use it, this is all terrible and ugly.
+** Features
+
+- high level wrapper for cublas in lisp, for example ~(multiply A B)~
+- automatic deallocation of tensors
+- automatic casting casting between the gpu and cpu depending on
+  operation.
+
+
+** Installation
+
+You will require the following in order to use this package:
+
+- CUDA, version 8 and 9 seem to work fine.
+- SBCL, maybe other implementations will work.
+- Quicklisp
+
+To get started, clone this repository into your Quicklisp
+~local-projects~ directory. Ensure that your CUDA lib folder is
+available in the ~LD_LIBRARY_PATH~. Run the demos script with ~sbcl
+--load demos.lisp~
+
+** Contributing
+
+This is a very young project and started mostly for fun. Contributions
+are absolutely welcome, just send a pull request if you want to add
+something. :)
+
