@@ -1,5 +1,14 @@
 (defpackage #:cl-cublas
-  (:use #:cl #:cffi))
+  (:use #:cl #:cffi)
+  (:export #:print-object
+	   #:zeros
+	   #:ones
+	   #:eye
+	   #:multiply-to
+	   #:multiply
+	   #:add
+	   #:rand
+	   #:randn))
 
 (cffi:define-foreign-library cublas
     (t (:default "libcublas")))

@@ -1,6 +1,3 @@
-(push '*default-pathname-defaults* asdf:*central-registry*)
-(asdf:load-system :cl-cublas)
-
 (in-package :cl-cublas)
 
 (defclass <matrix> ()
@@ -143,17 +140,3 @@
     (dotimes (i (* r c) Z)
       (setf (cffi:mem-aref (ptr-cpu (cpu Z)) :float i)
 	    (- (reduce '+ (loop for ii from 1 to 12 collect (random 1.0))) 6)))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Testing stuff:
-
-;; (let ((a (ones 2 2))
-;;       (b (eye 2))
-;;       (z (zeros 2 2)))
-;;   (dotimes (i 1000)
-;;     (multiply-to a b z))
-;;   (print z))
-
-(print (randn 5 5))
-
-;(print (add (ones 2 2) (ones 2 2)))
