@@ -93,10 +93,10 @@
 	  (format stream "~2,1,6$ " (cffi:mem-aref (ptr-cpu m) :float
 						   (+ (* (rows m) c) r))))
 	(format stream "~%"))
-      (dotimes (r (cols m) m) ;; cols and rows are switched now
-	(dotimes (c (rows m))
+      (dotimes (r (rows m) m) ;; cols and rows are switched now
+	(dotimes (c (cols m))
 	  (format stream "~2,1,6$ " (cffi:mem-aref (ptr-cpu m) :float
-						   (+ (* (rows m) r) c))))
+						   (+ (* (cols m) r) c))))
 	(format stream "~%"))))
 
 (defmethod zeros (r c)
@@ -117,6 +117,9 @@
   (if (eq (op A) :CUBLAS_OP_N)
       (setf (op A) :CUBLAS_OP_T)
       (setf (op A) :CUBLAS_OP_N))
+  (let ((tmp (rows A)))
+    (setf (rows A) (cols A))
+    (setf (cols A) tmp))
   A)
 
 (defmethod multiply-to ((A <matrix>) (B <matrix>) (Z <matrix>))

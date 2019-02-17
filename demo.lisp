@@ -37,6 +37,14 @@
   (transpose B)
   (print (multiply A B)))
 
+;; Checking non-square matrix transpose
+(let ((A (ones 2 3))
+      (B (ones 2 3))
+      (Z (zeros 2 2)))
+  (transpose B)
+  (multiply-to A B Z)
+  (print Z))
+
 ;; The print matrix function is aware of this tranpose flag.
 (let ((A (rand 4 3)))
   (print A)
