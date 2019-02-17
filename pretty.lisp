@@ -146,15 +146,31 @@
   (let ((Z (zeros (rows A) (cols B))))
     (multiply-to A B Z)))
 
+
+(defmethod add-to ((A <matrix>) (B <matrix>) (Z <matrix>))
+  "Adds matrices A and B, storing result in Z (returned). This
+   probably isn't much faster than doing it on the CPU, but prevents
+   having to copy memory back and forth"
+  ;; Ensure that the dimensions of A and B match"
+  (let ((m (rows A)) (n (cols B)) (k (cols A)))
+    (cffi:with-foreign-objects ((alpha ':float) (beta ':float))
+      (setf (cffi:mem-ref alpha :float) 1.0)
+      (setf (cffi:mem-ref beta :float) 1.0)
+      (assert (eq :CUBLAS_STATUS_SUCCESS
+      		  (cublasSgeam (cffi:mem-ref *CUBLAS_HANDLE* ':pointer)
+      			       (op A) (op B) m n alpha
+      			       (cffi:mem-ref (ptr-gpu (gpu A)) ':pointer) m beta
+      			       (cffi:mem-ref (ptr-gpu (gpu B)) ':pointer) k
+      			       (cffi:mem-ref (ptr-gpu (gpu Z)) ':pointer) m)))))
+  Z)
+
 (defmethod add ((A <matrix>) (B <matrix>))
   "Computes the sum of two matrices of the same size"
-  (assert (and (= (rows A) (rows B)) (= (cols A) (cols B))))
+  (assert (and (= (rows A) (rows B))
+	       (= (cols A) (cols B))))
   (let ((Z (zeros (rows A) (cols A))))
-    (dotimes (r (rows A) Z)
-      (dotimes (c (cols A))
-	(setf (cffi:mem-aref (ptr-cpu (cpu Z)) :float (+ (* (rows Z) c) r))
-	      (+ (cffi:mem-aref (ptr-cpu (cpu A)) :float (+ (* (rows A) c) r))
-		 (cffi:mem-aref (ptr-cpu (cpu B)) :float (+ (* (rows B) c) r))))))))
+    (add-to A B Z))
+  Z)
 
 (defmethod rand (r c)
   "Generate uniform random matrix"

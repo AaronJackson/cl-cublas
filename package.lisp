@@ -7,6 +7,7 @@
 	   #:transpose
 	   #:multiply-to
 	   #:multiply
+	   #:add-to
 	   #:add
 	   #:rand
 	   #:randn))

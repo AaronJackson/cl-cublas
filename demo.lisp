@@ -50,3 +50,10 @@
   (print A)
   (transpose A)
   (print A))
+
+;; Matrix addition is also performed on the GPU using the
+;; non-BLAS-standard matrix addition method.
+(let ((A (ones 3 3))
+      (B (ones 3 3))
+      (Z (zeros 3 3)))
+  (print (add-to A B Z)))
