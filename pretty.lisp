@@ -22,7 +22,12 @@
     ;; or device memory. It should be set to either 'cpu or 'gpu, and
     ;; this should be automatic.
     :accessor current-ptr
-    :initform 'cpu)))
+    :initform 'cpu)
+   (op
+    ;; Specifies whether the matrix should be traposed prior to an
+    ;; operation, such as addition or multiplication
+    :accessor op
+    :initform :CUBLAS_OP_N)))
 
 (defun attach-cpu-finalizer (m)
   (let ((p (ptr-cpu m)))
@@ -80,13 +85,19 @@
   m)
 
 (defmethod print-object ((m <matrix>) stream)
-  "prints a matrix, uh, as a list for now"
+  "prints a matrix"
   (cpu m)
-  (dotimes (r (rows m) m)
-    (dotimes (c (cols m))
-      (format stream "~2,1,6$ " (cffi:mem-aref (ptr-cpu m) :float
-					  (+ (* (rows m) c) r))))
-    (format stream "~%")))
+  (if (eq (op m) :CUBLAS_OP_N)
+      (dotimes (r (rows m) m)
+	(dotimes (c (cols m))
+	  (format stream "~2,1,6$ " (cffi:mem-aref (ptr-cpu m) :float
+						   (+ (* (rows m) c) r))))
+	(format stream "~%"))
+      (dotimes (r (cols m) m) ;; cols and rows are switched now
+	(dotimes (c (rows m))
+	  (format stream "~2,1,6$ " (cffi:mem-aref (ptr-cpu m) :float
+						   (+ (* (rows m) r) c))))
+	(format stream "~%"))))
 
 (defmethod zeros (r c)
   (let ((Z (matrix r c)))
@@ -102,6 +113,12 @@
     (dotimes (i r Z)
       (setf (cffi:mem-aref (ptr-cpu Z) :float (+ (* r i) i)) 1.0))))
 
+(defmethod transpose ((A <matrix>))
+  (if (eq (op A) :CUBLAS_OP_N)
+      (setf (op A) :CUBLAS_OP_T)
+      (setf (op A) :CUBLAS_OP_N))
+  A)
+
 (defmethod multiply-to ((A <matrix>) (B <matrix>) (Z <matrix>))
   "Multiply matrices A and B, storing result in Z (returned)"
   ;; Ensure that the inner dimensions of A and B match.
@@ -114,7 +131,7 @@
       (setf (cffi:mem-ref beta :float) 0.0)
       (assert (eq :CUBLAS_STATUS_SUCCESS
       		  (cublasSgemm_v2 (cffi:mem-ref *CUBLAS_HANDLE* ':pointer)
-      				  :CUBLAS_OP_N :CUBLAS_OP_N m n k alpha
+      				  (op A) (op B) m n k alpha
       				  (cffi:mem-ref (ptr-gpu (gpu A)) ':pointer) m
       				  (cffi:mem-ref (ptr-gpu (gpu B)) ':pointer) k beta
       				  (cffi:mem-ref (ptr-gpu (gpu Z)) ':pointer) m)))))
@@ -125,7 +142,6 @@
   (assert (= (cols A) (rows B)))
   (let ((Z (zeros (rows A) (cols B))))
     (multiply-to A B Z)))
-
 
 (defmethod add ((A <matrix>) (B <matrix>))
   "Computes the sum of two matrices of the same size"

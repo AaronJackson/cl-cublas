@@ -4,6 +4,7 @@
 	   #:zeros
 	   #:ones
 	   #:eye
+	   #:transpose
 	   #:multiply-to
 	   #:multiply
 	   #:add

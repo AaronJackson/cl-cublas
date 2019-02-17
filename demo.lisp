@@ -24,3 +24,21 @@
 ;; randn.
 (print (rand 3 3)) ;; uniform
 (print (randn 3 3)) ;; normal (estimated)
+
+;; Matrices can be transposed, but tranposing a matrix simply sets a
+;; flag. cuBLAS handles the rest, making transpositions very fast.
+(let ((A (set-data (matrix 2 2) #(2.0 1.0
+				  2.0 2.0)))
+      (B (set-data (matrix 2 2) #(2.0 2.0
+				  1.0 1.0))))
+  (print (multiply A B))
+  (transpose B)
+  (print (multiply A B))
+  (transpose B)
+  (print (multiply A B)))
+
+;; The print matrix function is aware of this tranpose flag.
+(let ((A (rand 4 3)))
+  (print A)
+  (transpose A)
+  (print A))
