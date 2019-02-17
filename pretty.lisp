@@ -1,5 +1,9 @@
 (in-package :cl-cublas)
 
+(defparameter *CUBLAS_HANDLE* (cffi:foreign-alloc :pointer))
+(assert (eq :CUBLAS_STATUS_SUCCESS
+	    (cublasCreate_v2 *CUBLAS_HANDLE*)))
+
 (defclass <matrix> ()
   ((rows
     :initarg :rows
@@ -104,12 +108,16 @@
   (assert (= (cols A) (rows B)))
   ;; Ensure that the outer dimensions of A and B match the size of Z.
   (assert (and (= (rows A) (rows Z)) (= (cols B) (cols Z))))
-  (let ((m (rows A)) (n (cols B)) (k (cols A)) (alpha 1.0) (beta 0.0))
-    ;; 78 is ASCII N, i.e. no transpose.
-    (cublasSgemm 78 78 m n k alpha
-		 (cffi:mem-ref (ptr-gpu (gpu A)) ':pointer) m
-		 (cffi:mem-ref (ptr-gpu (gpu B)) ':pointer) k beta
-		 (cffi:mem-ref (ptr-gpu (gpu Z)) ':pointer) m))
+  (let ((m (rows A)) (n (cols B)) (k (cols A)))
+    (cffi:with-foreign-objects ((alpha ':float) (beta ':float))
+      (setf (cffi:mem-ref alpha :float) 1.0)
+      (setf (cffi:mem-ref beta :float) 0.0)
+      (assert (eq :CUBLAS_STATUS_SUCCESS
+      		  (cublasSgemm_v2 (cffi:mem-ref *CUBLAS_HANDLE* ':pointer)
+      				  :CUBLAS_OP_N :CUBLAS_OP_N m n k alpha
+      				  (cffi:mem-ref (ptr-gpu (gpu A)) ':pointer) m
+      				  (cffi:mem-ref (ptr-gpu (gpu B)) ':pointer) k beta
+      				  (cffi:mem-ref (ptr-gpu (gpu Z)) ':pointer) m)))))
   Z)
 
 (defmethod multiply ((A <matrix>) (B <matrix>))
@@ -117,6 +125,7 @@
   (assert (= (cols A) (rows B)))
   (let ((Z (zeros (rows A) (cols B))))
     (multiply-to A B Z)))
+
 
 (defmethod add ((A <matrix>) (B <matrix>))
   "Computes the sum of two matrices of the same size"
