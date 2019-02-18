@@ -89,14 +89,14 @@
   (cpu m)
   (if (eq (op m) :CUBLAS_OP_N)
       (dotimes (r (rows m) m)
-	(dotimes (c (cols m))
-	  (format stream "~2,1,6$ " (cffi:mem-aref (ptr-cpu m) :float
-						   (+ (* (rows m) c) r))))
-	(format stream "~%"))
+ 	(dotimes (c (cols m))
+ 	  (format stream "~2,1,6$ " (cffi:mem-aref (ptr-cpu m) :float
+ 						   (+ (* (rows m) c) r))))
+ 	(format stream "~%"))
       (dotimes (r (rows m) m) ;; cols and rows are switched now
-	(dotimes (c (cols m))
-	  (format stream "~2,1,6$ " (cffi:mem-aref (ptr-cpu m) :float
-						   (+ (* (cols m) r) c))))
+ 	(dotimes (c (cols m))
+ 	  (format stream "~2,1,6$ " (cffi:mem-aref (ptr-cpu m) :float
+ 						   (+ (* (cols m) r) c))))
 	(format stream "~%"))))
 
 (defmethod zeros (r c)
@@ -107,11 +107,15 @@
   (let ((Z (matrix r c)))
     (set-data Z (make-array (* r c) :initial-element 1.0))))
 
-(defmethod eye (r)
-  "Returns the identity matrix of size r x r"
+(defmethod diag-of (r v)
   (let ((Z (zeros r r)))
     (dotimes (i r Z)
-      (setf (cffi:mem-aref (ptr-cpu Z) :float (+ (* r i) i)) 1.0))))
+      (setf (cffi:mem-aref (ptr-cpu Z) :float (+ (* r i) i)) v))
+  Z))
+
+(defmethod eye (r)
+  "Returns the identity matrix of size r x r"
+  (diag-of r 1.0))
 
 (defmethod transpose ((A <matrix>))
   (if (eq (op A) :CUBLAS_OP_N)
@@ -146,6 +150,14 @@
   (let ((Z (zeros (rows A) (cols B))))
     (multiply-to A B Z)))
 
+(defmethod multiply ((A <matrix>) v)
+  "Multiply matrix A by scalar v"
+  ;; Not really happy about doing this as it pushes a diagonal matrix
+  ;; to the GPU, which is not exactly optimal. However, doing it on
+  ;; the CPU will require pulling the data and probably pushing it
+  ;; again later. I might add an &optional inplace arg later, which
+  ;; can use the level-1 scal function, but would overwrite A.
+  (multiply A (diag-of (cols A) v)))
 
 (defmethod add-to ((A <matrix>) (B <matrix>) (Z <matrix>))
   "Adds matrices A and B, storing result in Z (returned). This
@@ -169,8 +181,8 @@
   (assert (and (= (rows A) (rows B))
 	       (= (cols A) (cols B))))
   (let ((Z (zeros (rows A) (cols A))))
-    (add-to A B Z))
-  Z)
+    (add-to A B Z)
+    Z))
 
 (defmethod rand (r c)
   "Generate uniform random matrix"

@@ -57,3 +57,6 @@
       (B (ones 3 3))
       (Z (zeros 3 3)))
   (print (add-to A B Z)))
+
+;; Testing matrix-scalar multiplication
+(print (multiply (ones 4 3) 7.0))
